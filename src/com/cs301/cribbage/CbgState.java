@@ -13,9 +13,10 @@ class CbgState {
     private Card[] player1Hand;
     private Card[] player2Hand;
     private Card[] crib;
-    private Card[] deck;
+    private Deck deck;
     private Card bonusCard;
     private int gameStage;
+    private int winner;
     protected int player1Score;
     protected int player2Score;
     protected int tally;
@@ -63,7 +64,7 @@ class CbgState {
     	this.crib = crib;
     }
 
-    public final void setDeck(Card[] deck) {
+    public final void setDeck(Deck deck) {
     	this.deck = deck;
     }
 
@@ -81,6 +82,9 @@ class CbgState {
     
     public final void setGameOver(boolean isGameOver){
     	this.isGameOver = isGameOver;
+    }
+    public final void setWinner(int winner){
+    	this.winner = winner;
     }
 
     public final int getScore(int player) {
@@ -119,7 +123,7 @@ class CbgState {
     	else return null;// if error
     }
 
-    public final Card[] getDeck() {
+    public final Deck getDeck() {
     	return deck;
     }
 
@@ -135,10 +139,19 @@ class CbgState {
     public final int getGameStage() {
     	return gameStage;
     }
+   
     public void isGameOver(){
-    	if(player1Score >= MAX_SCORE || player2Score >= MAX_SCORE){
+    	if(player1Score >= MAX_SCORE){
     		setGameOver(true);
+    		setWinner(PLAYER_1);
     	}
+    	else if (player2Score >= MAX_SCORE){
+    		setGameOver(true);
+    		setWinner(PLAYER_2);
+    	}
+    }
+    public int getWinner(){
+    	return winner;
     }
 
 
