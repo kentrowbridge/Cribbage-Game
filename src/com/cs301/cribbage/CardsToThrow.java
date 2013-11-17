@@ -1,17 +1,31 @@
 package com.cs301.cribbage;
 import edu.up.cs301.card.*;
+import edu.up.cs301.game.GamePlayer;
+import edu.up.cs301.game.actionMsg.GameAction;
 
 /* 
    
  */
 
 
-class CardsToThrow {
+class CardsToThrow extends GameAction {
 
-    private Card[] cardsToThrow;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7411287322939386780L;
+	/**
+	 * 
+	 */
+	private Card[] cardsToThrow;
 
-    public void CardsToTable(Card[] cards) {
-    
+    public CardsToThrow(GamePlayer player, Card[] cards) {
+    	super(player);
+    	cardsToThrow = cards;
+    }
+    // getter for cards thrown
+    public Card[] cards(){
+    	return cardsToThrow;
     }
 
 
