@@ -1,3 +1,4 @@
+package edu.up.cs301.card;
 
 import java.lang.Math; // for math random funciton
 
@@ -39,7 +40,7 @@ public class Card
     /**
      * This function throws two random cards from an initial hand of 6
      */
-    Card[] randomThrow(Card[] hand){
+    public Card[] randomThrow(Card[] hand){
         int rand1 = (int)Math.random()*hand.length; // oracle to remind myself how to make a random number.
         int rand2 = (int)Math.random()*hand.length;
         while(rand1 == rand2) {
@@ -54,7 +55,7 @@ public class Card
     /**
      * This function plays a random card to the table
      */
-    Card randomCardToTable(Card[] hand){
+    public Card randomCardToTable(Card[] hand){
         int rand1 = (int)Math.random()*hand.length; // oracle to remind myself how to make a random number.
         // return the randomly chosen element if not null. 
         // if null, loop through the array until a non-null element is found and then retrun.
@@ -67,7 +68,7 @@ public class Card
     /**
      * This function throws two selected cards from an initial hand of 6
      */
-    Card[] selectedThrow(Card[] hand){
+    public Card[] selectedThrow(Card[] hand){
         Card[] handToKeep = findTopHand(hand);
         Card[] toThrow = new Card[2];
         boolean[] foundMatch = new boolean[6];
@@ -100,7 +101,7 @@ public class Card
     /**
      * This function plays a selected card to the table
      */
-    Card selectedCardToTable(Card[] hand, Card[] table){
+    public Card selectedCardToTable(Card[] hand, Card[] table){
         int i = 0;
         int highScore = 0;
         Card bestCard = hand[0];
@@ -270,7 +271,7 @@ public class Card
     } // end count4(Card hand[])
     
     // counts the score when handed a hand of 5 cards (including the bonus card)
-    int count5(Card hand[], Card bonusCard)
+    public int count5(Card hand[], Card bonusCard)
     {
         // check that there are the proper number of cards in the hand
         if (hand.length != NUM_CARDS_TO_KEEP) return ERROR;
@@ -415,7 +416,7 @@ public class Card
     // where the first card layed on the table is element zero, the second card layed down is element 1, etc.
     // the table passed in must have a card at every spot
     // use array list and convert to array, perhaps
-    int countTable(Card table[])
+    public int countTable(Card table[])
     {
         // initialize score
         int score = 0;
@@ -461,7 +462,7 @@ public class Card
         return score;
     }
     
-    int isMoreFlush(Card table[], int cardToCheck, int flushSuit)
+    public int isMoreFlush(Card table[], int cardToCheck, int flushSuit)
     {
         if (cardToCheck > 0 && table[cardToCheck].suit == flushSuit) return 1 + isMoreFlush(table, cardToCheck - 1, flushSuit);
         if (cardToCheck == 0 && table[cardToCheck].suit == flushSuit) return 1;
@@ -472,7 +473,7 @@ public class Card
     // counts the tally of the table
     // the table passed in must have a card at every spot
     // use array list and convert to array for hand in, perhaps
-    int getTally(Card table[])
+    public int getTally(Card table[])
     {
         int tally = 0; // the aggregate tally
         int i = 0; // generic iterator
@@ -490,5 +491,15 @@ public class Card
     {
         // put your code here
         return y;
-    }     
+    }
+
+	public static Card fromString(String string) {
+		// TODO rewrite this
+		return null;
+	}
+
+	public String shortName() {
+		// TODO rewrite this
+		return null;
+	}     
 }
