@@ -17,6 +17,10 @@ public enum Suit {
 //		public String longName() {
 //			return "Club";
 //		}
+		
+		public int intSuit() {
+			return 0;
+		}
 	},
 	
 	// diamond
@@ -25,6 +29,10 @@ public enum Suit {
 //		public String longName() {
 //			return "Diamond";
 //		}
+		
+		public int intSuit() {
+			return 1;
+		}
 	},
 	
 	// heart
@@ -33,6 +41,10 @@ public enum Suit {
 //		public String longName() {
 //			return "Heart";
 //		}
+		
+		public int intSuit() {
+			return 2;
+		}
 	},
 	
 	// spade
@@ -41,7 +53,17 @@ public enum Suit {
 //		public String longName() {
 //			return "Spade";
 //		}
+		
+		public int intSuit() {
+			return 3;
+		}
 	};
+	
+	// Default set to unused value 4
+	
+	public int intSuit() {
+		return 4;
+	}
 
 	/**
 	 * the "short" (one-character) name that represents the suit

@@ -10,7 +10,13 @@ import java.util.ArrayList;
 public enum Rank {
 	
 	// ace
-	ACE,
+	ACE {
+		
+		public int intRank() {
+			return 1;
+		}
+	},
+	
 	
 	// deuce
 	TWO {
@@ -18,6 +24,10 @@ public enum Rank {
 		@Override
 		public char shortName() {
 			return '2';
+		}
+		
+		public int intRank() {
+			return 2;
 		}
 	},
 
@@ -28,6 +38,10 @@ public enum Rank {
 		public char shortName() {
 			return '3';
 		}
+		
+		public int intRank() {
+			return 3;
+		}
 	},
 
 	// four
@@ -36,6 +50,10 @@ public enum Rank {
 		@Override
 		public char shortName() {
 			return '4';
+		}
+		
+		public int intRank() {
+			return 4;
 		}
 	},
 
@@ -46,6 +64,10 @@ public enum Rank {
 		public char shortName() {
 			return '5';
 		}
+		
+		public int intRank() {
+			return 5;
+		}
 	},
 
 	// six
@@ -54,6 +76,10 @@ public enum Rank {
 		@Override
 		public char shortName() {
 			return '6';
+		}
+		
+		public int intRank() {
+			return 6;
 		}
 	},
 
@@ -64,6 +90,10 @@ public enum Rank {
 		public char shortName() {
 			return '7';
 		}
+		
+		public int intRank() {
+			return 7;
+		}
 	},
 
 	// eight
@@ -72,6 +102,10 @@ public enum Rank {
 		@Override
 		public char shortName() {
 			return '8';
+		}
+		
+		public int intRank() {
+			return 8;
 		}
 	},
 	
@@ -82,19 +116,47 @@ public enum Rank {
 		public char shortName() {
 			return '9';
 		}
+		
+		public int intRank() {
+			return 9;
+		}
 	},
 	
 	// ten
-	TEN,
+	TEN{
+	
+	public int intRank() {
+		return 10;
+	}
+	},
 
 	// jack
-	JACK,
+	JACK{
+		
+		public int intRank() {
+			return 11;
+		}
+	},
 
 	// queen
-	QUEEN,
+	QUEEN{
+
+		
+		public int intRank() {
+			return 12;
+		}
+	},
+	
 
 	// king
-	KING
+	KING{
+
+		
+		public int intRank() {
+			return 13;
+		}
+		}
+	
 	;
 	
 	/**
@@ -108,6 +170,40 @@ public enum Rank {
 		// TWO through NINE override this
 		return this.toString().charAt(0);
 	}
+	
+	/**
+	 * the unused default intRank() method
+	 * 
+	 * @return
+	 * 		0, an unused rank value
+	 */
+	public int intRank() {
+		return 0;
+	}
+	
+	/**
+	 * the value of the card when played to the table
+	 * 
+	 * @return
+	 * 		the value of the card when played to the table
+	 */
+	public int intCountValue() {
+		int tempInt = this.intRank();
+		if (tempInt < 10) return tempInt;
+		else return 10;
+	}
+	
+//	/**
+//	 * the int name of a rank
+//	 * 
+//	 * @return
+//	 * 		the rank's int name
+//	 */
+//	public int intRank() {
+//		// the default is the first character of the print-string;
+//		// TWO through NINE override this
+//		return this;
+//	}
 	
 	/**
 	 * the numeric value of the rank
