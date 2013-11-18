@@ -18,14 +18,19 @@ class CardsToThrow extends GameAction {
 	 * 
 	 */
 	private Card[] cardsToThrow;
-
+	private GamePlayer player;
     public CardsToThrow(GamePlayer player, Card[] cards) {
     	super(player);
+    	this.player = player;
     	cardsToThrow = cards;
     }
     // getter for cards thrown
     public Card[] cards(){
     	return cardsToThrow;
+    }
+    
+    public GamePlayer player(){
+    	return player;
     }
 
 

@@ -1,6 +1,8 @@
 package com.cs301.cribbage;
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import edu.up.cs301.card.*;
 import edu.up.cs301.game.*;
 import edu.up.cs301.game.actionMsg.GameAction;
@@ -16,15 +18,16 @@ class CbgLocalGame extends LocalGame{
 	private CbgState state;
 	private int currentGameStage;
 	private int throwCount;
-	private int pegCount;
+	private int tallyCount;
 	private CbgCounter counter;
-
+	private int turn;
 	private int originalTally;
 
 	public CbgLocalGame(){
 		deck = new Deck();//creates a deck
 		state = new CbgState();
 		counter = new CbgCounter();
+		turn = CbgState.PLAYER_1;
 		gameCycle();
 
 	}
@@ -36,15 +39,15 @@ class CbgLocalGame extends LocalGame{
 			deck.add52().shuffle();// creates a shuffled deck for each round
 			state.setDeck(deck); 
 			deal();
-			currentGameStage = state.getGameStage();//TODO write getgameStage Method
 			throwCount = 0;
-			while (currentGameStage == state.THROW_STAGE)
+			tallyCount = 0;//reset tracker variables
+			while (state.getGameStage() == state.THROW_STAGE)
 			{
 				if(throwCount >= 2){
 					state.setGameStage(state.PEG_STAGE);//each time a player throws a card, the throwcount is updated, when it hits 2 it moves on to the next stage
 				}
 			}
-			while (currentGameStage == state.PEG_STAGE)
+			while (state.getGameStage() == state.PEG_STAGE)
 			{
 				//once the game is in the pegging stage, flips the top card of deck
 				state.getBonusCard();
@@ -53,12 +56,14 @@ class CbgLocalGame extends LocalGame{
 				state.setGameStage(state.COUNT_STAGE);
 				}
 			}
-			while (currentGameStage == state.COUNT_STAGE)
+			while (state.getGameStage() == state.COUNT_STAGE)
 			{
 				//after the score has been tallied, checks if the game is over
-				state.getGameOver();
 				originalTally = state.getTally();
-				if (state.getTally() > originalTally)
+				state.setTally(counter.getTally((Card[])state.getTable().toArray()));
+				state.getGameOver();
+				tallyCount++;
+				if (tallyCount >= 2)
 				{
 					state.setGameStage(state.THROW_STAGE);
 				}
@@ -91,7 +96,7 @@ class CbgLocalGame extends LocalGame{
 	}
 	@Override
 	protected final boolean makeMove(GameAction action) {
-		if (action instanceof CardsToTable){//if card to table action
+		if (action instanceof CardsToTable && canMove(getPlayerIdx(action.getPlayer()))){//if card to table action and player can move
 			ArrayList<Card> cardArr = new ArrayList<Card>(); 
 			CardsToTable cards = (CardsToTable) action;
 			cardArr = state.getTable();  // get table
@@ -99,7 +104,7 @@ class CbgLocalGame extends LocalGame{
 			state.setTable(cardArr); //send back to gamestate
 			return true;
 		}
-		else if (action instanceof CardsToThrow){
+		else if (action instanceof CardsToThrow  && canMove(getPlayerIdx(action.getPlayer()))){
 			CardsToThrow cards = (CardsToThrow) action;
 			Card[] cardArr = state.getCrib();
 			Card[] cardsThrown = cards.cards();
@@ -141,8 +146,10 @@ class CbgLocalGame extends LocalGame{
 
 	@Override
 	protected boolean canMove(int playerIdx) {
-		// TODO Auto-generated method stub
-		return false;
+		if (playerIdx == turn){
+			return true;
+		}
+		else return false;
 	}
 
 	@Override
@@ -159,6 +166,16 @@ class CbgLocalGame extends LocalGame{
 		}
 
 		return "FALSE";//if game is not over
+	}
+	
+	private void switchTurn(){//switches the turn
+		if(turn == CbgState.PLAYER_1){
+			turn = CbgState.PLAYER_2;
+		}
+		else if(turn == CbgState.PLAYER_2){
+			turn = CbgState.PLAYER_1;
+		}
+		else Log.i("ERROR", "Player number is broken");
 	}
 
 }

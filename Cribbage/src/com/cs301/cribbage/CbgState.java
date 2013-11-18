@@ -10,8 +10,8 @@ import edu.up.cs301.card.*;
 
 
 class CbgState {
-	public static final int PLAYER_1 = 1;//player constants
-	public static final int PLAYER_2 = 2;
+	public static final int PLAYER_1 = 0;//player constants
+	public static final int PLAYER_2 = 1;
     private Card[] player1Hand;
     private Card[] player2Hand;
     private Card[] crib;
