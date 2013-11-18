@@ -88,12 +88,6 @@ class CbgLocalGame extends LocalGame{
 		return count;
 	}
 
-	private final boolean canMove() {
-		boolean canMove = false;
-		// TODO
-		return canMove;
-
-	}
 	@Override
 	protected final boolean makeMove(GameAction action) {
 		if (action instanceof CardsToTable && canMove(getPlayerIdx(action.getPlayer()))){//if card to table action and player can move
@@ -102,6 +96,7 @@ class CbgLocalGame extends LocalGame{
 			cardArr = state.getTable();  // get table
 			cardArr.add(cards.cards()); //add card
 			state.setTable(cardArr); //send back to gamestate
+			switchTurn();
 			return true;
 		}
 		else if (action instanceof CardsToThrow  && canMove(getPlayerIdx(action.getPlayer()))){
@@ -111,9 +106,11 @@ class CbgLocalGame extends LocalGame{
 			for(int i = 0; i < 2; i++){
 				cardArr[cardArr.length] = cardsThrown[i];
 			}
+			switchTurn();
 			throwCount++;
 			return true;
 		}
+		
 		else return false;
 	}
 
