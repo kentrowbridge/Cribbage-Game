@@ -43,18 +43,21 @@ class CbgLocalGame extends LocalGame{
 			tallyCount = 0;//reset tracker variables
 			while (state.getGameStage() == state.THROW_STAGE)
 			{
-				if(throwCount >= 2){
-					state.setGameStage(state.PEG_STAGE);//each time a player throws a card, the throwcount is updated, when it hits 2 it moves on to the next stage
+				if(throwCount >= 2){//throwcount updated each time a person throws their set of 
+					//2 cards as it is only a single action
+					state.setGameStage(state.PEG_STAGE);//each time a player throws a card, 
+					//the throwcount is updated, when it hits 2 it moves on to the next stage
 				}
 			}
 			while (state.getGameStage() == state.PEG_STAGE)
 			{
 				//once the game is in the pegging stage, flips the top card of deck
 				state.getBonusCard();
-				
-				if(counter.countTable((Card[])state.getTable().toArray()) >= 31){//get count, if greater than 31, move on
-				state.setGameStage(state.COUNT_STAGE);
-				}
+				//TODO make method to determine when all cards placed on table that can be
+//				if(counter.countTable((Card[])state.getTable().toArray()) >= 31){ 
+//				//get count, if greater than 31, move on
+//				state.setGameStage(state.COUNT_STAGE);
+//				}
 			}
 			while (state.getGameStage() == state.COUNT_STAGE)
 			{
@@ -73,7 +76,8 @@ class CbgLocalGame extends LocalGame{
 	}//gameCycle
 
 	/*
-	 * Checks the boolean isGameOver in gameState, and if its true it sets the return string to reflect the final score and the winner.
+	 * Checks the boolean isGameOver in gameState, and if its true it sets the return string 
+	 * to reflect the final score and the winner.
 	 */
 
 	private final boolean isValidCard() {
@@ -84,13 +88,14 @@ class CbgLocalGame extends LocalGame{
 
 	private final int handCount() {
 		int count = 0;
-		// TODO
+		// TODO maybe put in counter class?
 		return count;
 	}
 
 	@Override
 	protected final boolean makeMove(GameAction action) {
-		if (action instanceof CardsToTable && canMove(getPlayerIdx(action.getPlayer()))){//if card to table action and player can move
+		if (action instanceof CardsToTable && canMove(getPlayerIdx(action.getPlayer()))){
+			//if card to table action and player can move
 			ArrayList<Card> cardArr = new ArrayList<Card>(); 
 			CardsToTable cards = (CardsToTable) action;
 			cardArr = state.getTable();  // get table
@@ -114,11 +119,11 @@ class CbgLocalGame extends LocalGame{
 		else return false;
 	}
 
-	private final int countTable(Card table[]) {
-		int count = 0;
-		// TODO
-		return count;
-	}
+//	private final int countTable(Card table[]) {
+//		int count = 0;
+//		// TODO in counter class
+//		return count;
+//	}
 
 	private final void flipBonusCard() {//pulls a bonus card 
 		state.setBonusCard(deck.removeTopCard());
