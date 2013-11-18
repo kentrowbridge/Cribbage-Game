@@ -17,12 +17,14 @@ class CbgLocalGame extends LocalGame{
 	private int currentGameStage;
 	private int throwCount;
 	private int pegCount;
+	private CbgCounter counter;
 
 	private int originalTally;
 
 	public CbgLocalGame(){
 		deck = new Deck();//creates a deck
 		state = new CbgState();
+		counter = new CbgCounter();
 		gameCycle();
 
 	}
@@ -46,7 +48,10 @@ class CbgLocalGame extends LocalGame{
 			{
 				//once the game is in the pegging stage, flips the top card of deck
 				state.getBonusCard();
+				
+				if(counter.countTable((Card[])state.getTable().toArray()) >= 31){//get count, if greater than 31, move on
 				state.setGameStage(state.COUNT_STAGE);
+				}
 			}
 			while (currentGameStage == state.COUNT_STAGE)
 			{
@@ -58,7 +63,7 @@ class CbgLocalGame extends LocalGame{
 					state.setGameStage(state.THROW_STAGE);
 				}
 			}
-			deck.shuffle();
+			
 		}
 	}//gameCycle
 
