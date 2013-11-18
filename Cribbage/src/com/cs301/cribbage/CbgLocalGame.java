@@ -17,12 +17,10 @@ class CbgLocalGame extends LocalGame{
         private int currentGameStage;
         
         private int originalTally;
-        
+         
         public CbgLocalGame(){
-                deck = new Deck();//creates a deck and shuffles it.
-                deck.add52().shuffle();
+                deck = new Deck();//creates a deck
                 state = new CbgState();
-                state.setDeck(deck); 
                 gameCycle();
 
         }
@@ -31,6 +29,8 @@ class CbgLocalGame extends LocalGame{
         {
                 while (!state.getGameOver())
                 {
+                		deck.add52().shuffle();// creates a shuffled deck for each round
+                		state.setDeck(deck); 
                         deal();
                         currentGameStage = state.getGameStage();//TODO write getgameStage Method
                         while (currentGameStage == state.THROW_STAGE)
