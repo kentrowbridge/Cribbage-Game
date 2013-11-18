@@ -53,7 +53,14 @@ class CbgLocalGame extends LocalGame{
 			{
 				//once the game is in the pegging stage, flips the top card of deck
 				state.getBonusCard();
+				if(state.getGameOver()) break;
+				
+				
 				//TODO make method to determine when all cards placed on table that can be
+				
+				
+				
+				
 //				if(counter.countTable((Card[])state.getTable().toArray()) >= 31){ 
 //				//get count, if greater than 31, move on
 //				state.setGameStage(state.COUNT_STAGE);
@@ -64,7 +71,7 @@ class CbgLocalGame extends LocalGame{
 				//after the score has been tallied, checks if the game is over
 				originalTally = state.getTally();
 				state.setTally(counter.getTally((Card[])state.getTable().toArray()));
-				state.getGameOver();
+				if(state.getGameOver()) break;
 				tallyCount++;
 				if (tallyCount >= 2)
 				{
