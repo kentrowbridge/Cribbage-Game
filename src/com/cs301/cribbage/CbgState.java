@@ -1,4 +1,6 @@
 package com.cs301.cribbage;
+import java.util.ArrayList;
+
 import android.util.Log;
 import edu.up.cs301.card.*;
 
@@ -20,7 +22,7 @@ class CbgState {
     protected int player1Score;
     protected int player2Score;
     protected int tally;
-    protected Card[] tableArray;
+    protected ArrayList<Card> tableArray;
     public final int THROW_STAGE = 1;
     public final int COUNT_STAGE = 3;
     public final int PEG_STAGE = 2;
@@ -33,7 +35,13 @@ class CbgState {
     public boolean isGameOver;
     public int MAX_TALLY = 31;
     public int MAX_SCORE = 121;
-
+   
+    
+    public CbgState(){
+    	super();
+    	tableArray = new ArrayList<Card>();
+    }
+    
     public final void setScore(int score, int player) {
     	if (player == PLAYER_1){
     		player1Score = score;
@@ -72,7 +80,7 @@ class CbgState {
     	this.deck = deck;
     }
 
-    public final void setTable(Card[] table) {
+    public final void setTable(ArrayList<Card> table) {
     	this.tableArray = table;
     }
 
@@ -112,7 +120,7 @@ class CbgState {
     
     }
 
-    public final Card[] getTable() {
+    public final ArrayList<Card> getTable() {
     	return tableArray;
     
     }

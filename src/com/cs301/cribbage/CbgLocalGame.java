@@ -1,4 +1,6 @@
 package com.cs301.cribbage;
+import java.util.ArrayList;
+
 import edu.up.cs301.card.*;
 import edu.up.cs301.game.*;
 import edu.up.cs301.game.actionMsg.GameAction;
@@ -20,7 +22,8 @@ class CbgLocalGame extends LocalGame{
                 deck = new Deck();//creates a deck and shuffles it.
                 deck.add52().shuffle();
                 state = new CbgState();
-                state.setDeck(deck);                
+                state.setDeck(deck); 
+                gameCycle();
 
         }
 
@@ -77,11 +80,26 @@ class CbgLocalGame extends LocalGame{
                 return canMove;
 
         }
-
-        private final boolean makeMove() {
-                boolean makeMove = false;
-                // TODO
-                return makeMove;
+        @Override
+        protected final boolean makeMove(GameAction action) {
+              if (action instanceof CardsToTable){//if card to table action
+            	  ArrayList<Card> cardArr = new ArrayList<Card>(); 
+            	  CardsToTable cards = (CardsToTable) action;
+            	  cardArr = state.getTable();  // get table
+            	  cardArr.add(cards.cards()); //add card
+            	  state.setTable(cardArr); //send back to gamestate
+            	  return true;
+              }
+              else if (action instanceof CardsToThrow){
+            	  CardsToThrow cards = (CardsToThrow) action;
+            	  Card[] cardArr = state.getCrib();
+            	  Card[] cardsThrown = cards.cards();
+            	  for(int i = 0; i < 2; i++){
+            		  cardArr[cardArr.length] = cardsThrown[i];
+            	  }
+            	  return true;
+              }
+              else return false;
         }
 
         private final int countTable(Card table[]) {
@@ -133,9 +151,4 @@ class CbgLocalGame extends LocalGame{
                 return "FALSE";//if game is not over
         }
 
-        @Override
-        protected boolean makeMove(GameAction action) {
-                // TODO Auto-generated method stub
-                return false;
-        }
 }
