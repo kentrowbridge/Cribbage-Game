@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -237,13 +238,17 @@ public class AnimationSurface extends SurfaceView implements OnTouchListener {
 						// tell the animator to draw the next frame
 						synchronized (surfaceHolder) {
 							animator.tick(canvas);
+							
+							
 						}// synchronized
 					}
 				}// try
+				
 				finally {
 					// release the canvas
 					if (canvas != null) {
 						surfaceHolder.unlockCanvasAndPost(canvas);
+						
 					}
 				}
 

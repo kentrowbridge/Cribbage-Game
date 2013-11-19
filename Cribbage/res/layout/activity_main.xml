@@ -1,7 +1,5 @@
-<RelativeLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
@@ -15,6 +13,15 @@
     android:paddingRight="10dp"
     android:paddingTop="10dp"
     tools:context=".MainActivity" >
+
+    <edu.up.cs301.animation.AnimationSurface
+        android:id="@+id/tableView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,12 +45,11 @@
                 android:layout_weight="1"
                 android:orientation="horizontal" >
 
-                <edu.up.cs301.animation.AnimationSurface
-                    android:id="@+id/tableSurface"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#000000" />
+                <android.support.v7.widget.Space
+                    android:id="@+id/space1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <FrameLayout
                     android:layout_width="10dp"
@@ -87,7 +93,6 @@
                                 android:background="#00f0f0"
                                 android:text="COUNT"
                                 android:textSize="20sp" />
-
                         </LinearLayout>
 
                         <FrameLayout
@@ -105,12 +110,9 @@
                             android:background="#00ff00"
                             android:text="Tutorial Box"
                             android:textAppearance="?android:attr/textAppearanceMedium" />
-
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
-
         </LinearLayout>
 
         <FrameLayout
@@ -245,44 +247,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-
-            <edu.up.cs301.animation.AnimationSurface
-                android:id="@+id/deckSurface"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:background="#b22222" />
-
-            <FrameLayout
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0" >
-
-            </FrameLayout>
-
-           <edu.up.cs301.animation.AnimationSurface
-                android:id="@+id/handSurface"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <FrameLayout
-                android:layout_width="10dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0" >
-
-            </FrameLayout>
-
-            <edu.up.cs301.animation.AnimationSurface
-                android:id="@+id/cribSurface"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:background="#b22222" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>
-
