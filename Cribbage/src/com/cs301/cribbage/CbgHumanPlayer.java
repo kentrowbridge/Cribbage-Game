@@ -44,10 +44,10 @@ class CbgHumanPlayer extends GameHumanPlayer implements Animator, OnClickListene
 	private RectF[] handCardPos = new RectF[6];//positions that save where the cards are drawn in the players hand
 	private RectF[] tableCardPos = new RectF[10];
 	private Card[] tempHand = new Card[6];
-
+	private RectF[] throwPos = new RectF[4];
 	private Card[] toThrow = new Card[2];
 	private Card toTable;
-
+	private Card[] crib;
 	private ArrayList<Card> cardsOnTable = new ArrayList<Card>();
 	private GameAction action;
 	/*
@@ -178,16 +178,32 @@ class CbgHumanPlayer extends GameHumanPlayer implements Animator, OnClickListene
 		tableCardPos[7] = new RectF(8*cardWidth, 0, 8*cardWidth, 100);
 		tableCardPos[8] = new RectF(9*cardWidth, 0, 9*cardWidth, 100);
 		tableCardPos[9] = new RectF(9*cardWidth, 0, 10*cardWidth, 100);
-
+		throwPos[0] = new RectF(9*cardWidth, 400, 10*cardWidth, 550);
+		throwPos[1] = new RectF(10*cardWidth, 400, 11*cardWidth ,550);
+		throwPos[2] = new RectF(9*cardWidth, 550, 10*cardWidth, height);
+		throwPos[3] = new RectF(10*cardWidth, 550, 11*cardWidth, height);
 
 
 		tempHand = state.getHand();
 		cardsOnTable = state.getTable();
+		crib = state.getCrib();
 		if(tempHand != null){
 			for(int i = 0; i < tempHand.length;i++){
 				tempHand[i].drawOn(c,handCardPos[i]);//draws the cards in each position
 			}
 		}
+		boolean cribNull = false;
+		for (Card cards : crib){
+			if (cards == null){
+				cribNull = true;
+			}
+		}
+		if(!cribNull){
+			for(int i = 0; i < crib.length;i++){
+				crib[i].drawOn(c,throwPos[i]);//draws the cards in each position
+			}
+		}
+
 		if(cardsOnTable != null){
 			int counter = 0;
 
@@ -196,9 +212,12 @@ class CbgHumanPlayer extends GameHumanPlayer implements Animator, OnClickListene
 				counter++;
 			}
 
-
 		}
+
+
+
 	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -217,7 +236,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements Animator, OnClickListene
 		float x = event.getX();
 		float y = event.getY();	
 
-		if( state != null && state.getGameStage() == CbgState.THROW_STAGE){//TODO make so cards have a selected state and delete 
+		if( state != null && state.getGameStage() == CbgState.THROW_STAGE && state.getTurn() == 0){//TODO make so cards have a selected state and delete 
 			//the cards from hand
 			for(int i = 0; i<6;i++){
 				if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
@@ -226,7 +245,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements Animator, OnClickListene
 				}
 			}
 		}
-		if(state != null && state.getGameStage() == CbgState.PEG_STAGE){
+		if(state != null && state.getGameStage() == CbgState.PEG_STAGE && state.getTurn() == 0){
 			for(int i = 0; i<6;i++){
 				if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
 					selectCard(tempHand[i]);//TODO only for test to succeed

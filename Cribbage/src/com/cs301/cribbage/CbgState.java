@@ -11,7 +11,7 @@ class CbgState extends GameState{
 	private Card[] player1Hand;
 	private Card[] player2Hand;
 	private Card[] playerHand;
-
+	private int turn;
 	private Card[] crib;
 	private Deck deck;
 	private Card bonusCard;
@@ -41,7 +41,7 @@ class CbgState extends GameState{
 	public static int MAX_TALLY = 31;
 	public static int MAX_SCORE = 121;
 
-
+	
 	public CbgState(){
 		super();
 		tableArray = new ArrayList<Card>();
@@ -49,7 +49,7 @@ class CbgState extends GameState{
 
 		player2Hand= new Card[6];
 		playerHand = new Card[6] ;
-
+		
 		crib = new Card[4];
 		deck = new Deck();
 		deck = deck.add52().shuffle();
@@ -76,7 +76,10 @@ class CbgState extends GameState{
 		playerHand = new Card[4];
 
 	}
-	public final void setThrpwCount(int throwCount){
+	public void setTurn(int turn){
+		this.turn = turn;
+	}
+	public final void setThrowCount(int throwCount){
 		this.throwCount = throwCount;
 	}
 	public final void setScore(int score, int player) {
@@ -231,6 +234,9 @@ class CbgState extends GameState{
 	}
 	public int getThrowCount(){
 		return throwCount;
+	}
+	public int getTurn(){
+		return turn;
 	}
 	
 
