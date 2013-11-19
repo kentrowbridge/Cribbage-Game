@@ -22,73 +22,83 @@ class CbgLocalGame extends LocalGame{
 	private CbgCounter counter;
 	private int turn;
 	private int originalTally;
+	private GamePlayer p1;
+	private GamePlayer p2;
+
 
 	public CbgLocalGame(){
 		deck = new Deck();//creates a deck
 		state = new CbgState();
 		counter = new CbgCounter();
 		turn = CbgState.PLAYER_1;
-		gameCycle();
+		state.setGameOver(false);
+		
+		//gameCycle();
 
 	}
 
 	private void gameCycle()
 	{
-		while (!state.getGameOver())
-		{
+//		while (!state.getGameOver())
+//		{
 			state.tableArray = new ArrayList<Card>();
 			deck.add52().shuffle();// creates a shuffled deck for each round
 			state.setDeck(deck); 
 			deal();
 			throwCount = 0;
 			tallyCount = 0;//reset tracker variables
-			while (state.getGameStage() == state.THROW_STAGE)
-			{
-				if(throwCount >= 2){//throwcount updated each time a person throws their set of 
-					//2 cards as it is only a single action
-					state.setGameStage(state.PEG_STAGE);//each time a player throws a card, 
-					//the throwcount is updated, when it hits 2 it moves on to the next stage
-				}
-			}
+			state.setGameStage(state.THROW_STAGE);
+			sendUpdatedStateTo(p1);
+			sendUpdatedStateTo(p2);
+
 			
-			//once the game is in the pegging stage, flips the top card of deck
-			if (state.getGameStage() == state.PEG_STAGE) 
-				state.getBonusCard();
-			
-			while (state.getGameStage() == state.PEG_STAGE)
-			{
-				if(state.getGameOver()) break;//TODO initiate game over sequence
-				
-				if (state.tableArray.size() == 8)
-					state.setGameStage(state.COUNT_STAGE);
-				
-				originalTally = state.getTally();
-				state.setTally(counter.getTally((Card[])state.getTable().toArray()));
-			}
-			while (state.getGameStage() == state.COUNT_STAGE)
-			{
-				//after the score has been tallied, checks if the game is over
-				if(state.getGameOver()) break;
-				CbgCounter counter = new CbgCounter();
-				
-				if (state.cribOwner == state.PLAYER_1) {
-					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);// counting player 2 hand
-					checkIfGameOver();
-					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);// counting player 1 hand
-					state.setScore(state.player1Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_1);// counting crib hand for player 1 
-					checkIfGameOver();
-				} else {
-					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);
-					checkIfGameOver();
-					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);
-					state.setScore(state.player2Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_2);
-					checkIfGameOver();
-				}
-				state.gameStage = state.THROW_STAGE;
-			}
+//			while (state.getGameStage() == state.THROW_STAGE)
+//			{
+//				if(throwCount >= 2){//throwcount updated each time a person throws their set of 
+//					//2 cards as it is only a single action
+//					state.setGameStage(state.PEG_STAGE);//each time a player throws a card, 
+//					//the throwcount is updated, when it hits 2 it moves on to the next stage
+//				}
+//			}
+//			
+//			//once the game is in the pegging stage, flips the top card of deck
+//			if (state.getGameStage() == state.PEG_STAGE) 
+//				state.getBonusCard();
+//			
+//			while (state.getGameStage() == state.PEG_STAGE)
+//			{
+//				if(state.getGameOver()) break;//TODO initiate game over sequence
+//				
+//				if (state.tableArray.size() == 8)
+//					state.setGameStage(state.COUNT_STAGE);
+//				
+//				originalTally = state.getTally();
+//				state.setTally(counter.getTally((Card[])state.getTable().toArray()));
+//			}
+//			while (state.getGameStage() == state.COUNT_STAGE)
+//			{
+//				//after the score has been tallied, checks if the game is over
+//				if(state.getGameOver()) break;
+//				CbgCounter counter = new CbgCounter();
+//				
+//				if (state.cribOwner == state.PLAYER_1) {
+//					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);// counting player 2 hand
+//					checkIfGameOver();
+//					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);// counting player 1 hand
+//					state.setScore(state.player1Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_1);// counting crib hand for player 1 
+//					checkIfGameOver();
+//				} else {
+//					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);
+//					checkIfGameOver();
+//					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);
+//					state.setScore(state.player2Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_2);
+//					checkIfGameOver();
+//				}
+//				state.gameStage = state.THROW_STAGE;
+//			}
 			
 		}//while (!state.getGameOver())
-	}//gameCycle
+	//}//gameCycle
 
 	/*
 	 * Checks the boolean isGameOver in gameState, and if its true it sets the return string 
@@ -182,8 +192,20 @@ class CbgLocalGame extends LocalGame{
 			throwCount++;
 			return true;
 		}
+		else if (action instanceof CheckInAction){
+			CheckInAction check = (CheckInAction) action;
+			if(getPlayerIdx(check.getPlayer()) == 0){
+				p1 = check.getPlayer();
+			}
+			if(getPlayerIdx(check.getPlayer()) == 1){
+				p2 = check.getPlayer();
+				
+			}
+			return true;
+		}
 		
 		else return false;
+		
 	}
 
 //	private final int countTable(Card table[]) {
@@ -209,7 +231,7 @@ class CbgLocalGame extends LocalGame{
 
 	@Override
 	protected void sendUpdatedStateTo(GamePlayer p) {
-		// TODO Auto-generated method stub
+		p.sendInfo(new CbgState(state));
 
 	}
 

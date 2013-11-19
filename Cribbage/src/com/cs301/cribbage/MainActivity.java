@@ -42,13 +42,13 @@ public class MainActivity extends GameMainActivity {
 			}});
 		
 		// a computer player type (player type 1)
-		playerTypes.add(new GamePlayerType("Computer Player") {
+		playerTypes.add(new GamePlayerType("Computer Smart Player") {
 			public GamePlayer createPlayer(String name) {
 				return new CbgComputerRandomPlayer(name);
 			}});
 		
 		// a computer player type (player type 2)
-		playerTypes.add(new GamePlayerType("Computer Player (GUI)") {
+		playerTypes.add(new GamePlayerType("Computer Random Player") {
 			public GamePlayer createPlayer(String name) {
 				return new CbgComputerRandomPlayer(name);
 			}});

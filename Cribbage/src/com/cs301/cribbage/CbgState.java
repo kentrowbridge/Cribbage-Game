@@ -19,11 +19,11 @@ class CbgState extends GameState{
     protected int player2Score;
     protected int tally;
     protected ArrayList<Card> tableArray;
-    public final int THROW_STAGE = 0;
-    public final int PEG_STAGE = 1;
-    public final int COUNT_STAGE = 2;
+    public static final int THROW_STAGE = 0;
+    public static final int PEG_STAGE = 1;
+    public static final int COUNT_STAGE = 2;
     public int cribOwner;
-    public final String[] tutorialTexts = {
+    public String[] tutorialTexts = {
     		"It is now the Throw Stage. Please select two cards to throw to the crib",
     		"It is now the Peg Stage. Please select one card at a time to send to the table",
     		"It is now the Count Stage. The cards are being counted."
@@ -35,13 +35,32 @@ class CbgState extends GameState{
      */
 
     public boolean isGameOver;
-    public int MAX_TALLY = 31;
-    public int MAX_SCORE = 121;
+    public static int MAX_TALLY = 31;
+    public static int MAX_SCORE = 121;
    
     
     public CbgState(){
     	super();
     	tableArray = new ArrayList<Card>();
+    }
+    public CbgState(CbgState orig){
+    	super();
+        player1Hand = orig.player1Hand;
+        player2Hand = orig.player2Hand;
+        crib = orig.crib;
+        deck = orig.deck;
+        bonusCard = orig.bonusCard;
+        gameStage = orig.gameStage;
+        winner = orig.winner ;
+        player1Score = orig.player1Score;
+        player2Score = orig.player2Score;
+        tally = orig.tally;
+        tableArray = orig.tableArray;
+        
+        cribOwner = orig.cribOwner;
+        tutorialTexts = orig.tutorialTexts ;
+        isGameOver = orig.isGameOver ;
+    	
     }
     
     public final void setScore(int score, int player) {
@@ -164,23 +183,23 @@ class CbgState extends GameState{
     }
     
     public final int getGameStage() {
-    	int p1Counter = 0;
-    	int p2Counter = 0;
-    	for(int i = 0; i<player1Hand.length; i++){
-    		if(player1Hand[i] != null){
-    			p1Counter++;
-    		}
-    		if(player2Hand[i] != null){
-    			p2Counter++;
-    		}
-    	}
-    	if(p1Counter == 6 && p2Counter == 6){
-    		return THROW_STAGE;
-    	}else if(p1Counter <= 4 && p2Counter <= 4) {
-    		return PEG_STAGE;
-    	}else if (p1Counter == 0 && p2Counter ==0){
-    		return COUNT_STAGE;
-    	}
+//    	int p1Counter = 0;
+//    	int p2Counter = 0;
+//    	for(int i = 0; i<player1Hand.length; i++){
+//    		if(player1Hand[i] != null){
+//    			p1Counter++;
+//    		}
+//    		if(player2Hand[i] != null){
+//    			p2Counter++;
+//    		}
+//    	}
+//    	if(p1Counter == 6 && p2Counter == 6){
+//    		return THROW_STAGE;
+//    	}else if(p1Counter <= 4 && p2Counter <= 4) {
+//    		return PEG_STAGE;
+//    	}else if (p1Counter == 0 && p2Counter ==0){
+//    		return COUNT_STAGE;
+//    	}
     	return gameStage;
     }//getGameStage
     
