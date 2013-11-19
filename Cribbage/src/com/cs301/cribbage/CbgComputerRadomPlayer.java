@@ -4,12 +4,13 @@ package com.cs301.cribbage;
  */
 
 import edu.up.cs301.card.Card;
+import edu.up.cs301.game.infoMsg.GameInfo;
 
 class CbgComputerRandomPlayer extends CbgComputerPlayer {
 
-	public CbgComputerRandomPlayer()
+	public CbgComputerRandomPlayer(String name)
 	{
-		super();
+		super(name);
 	}
 
 	/**
@@ -40,5 +41,11 @@ class CbgComputerRandomPlayer extends CbgComputerPlayer {
 			rand1 = (rand1 + 1)%6;
 		}
 		return hand[rand1];
+	}
+
+	@Override
+	protected void receiveInfo(GameInfo info) {
+		// TODO Auto-generated method stub
+		
 	}
 }

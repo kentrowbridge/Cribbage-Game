@@ -3,10 +3,15 @@ import edu.up.cs301.card.*;
 /* 
    
  */
+import edu.up.cs301.game.GameComputerPlayer;
 
 
-abstract class CbgComputerPlayer {
-
+abstract class CbgComputerPlayer extends GameComputerPlayer {
+	String name;
+	CbgComputerPlayer(String name){
+		super(name);
+		this.name = name;
+	}
 
     private final Card[] findTopHand() {
     	Card[] hand = new Card[6];
