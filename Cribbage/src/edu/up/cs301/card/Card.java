@@ -31,6 +31,8 @@ public class Card implements Serializable {
 	private static final long serialVersionUID = 893542931190030342L;
 	
 	// instance variables: the card's rank and the suit
+	
+	////THESE USED TO BE PRIVATE, BUT WE MADE THEM PUBLIC FOR THE CbgCounter CLASS
     public Rank rank;
     public Suit suit;
 
@@ -142,7 +144,7 @@ public class Card implements Serializable {
     public Rank getRank() {
     	return rank;
     }
-
+    
     /**
      * Tells the card's suit.
      *
@@ -218,7 +220,5 @@ public class Card implements Serializable {
     		}
     	}
     }
-    
-    
 
 }

@@ -1,6 +1,4 @@
 package com.cs301.cribbage;
-import java.util.ArrayList;
-
 import android.util.Log;
 import edu.up.cs301.card.*;
 
@@ -10,8 +8,8 @@ import edu.up.cs301.card.*;
 
 
 class CbgState {
-	public static final int PLAYER_1 = 0;//player constants
-	public static final int PLAYER_2 = 1;
+	public static final int PLAYER_1 = 1;//player constants
+	public static final int PLAYER_2 = 2;
     private Card[] player1Hand;
     private Card[] player2Hand;
     private Card[] crib;
@@ -22,7 +20,7 @@ class CbgState {
     protected int player1Score;
     protected int player2Score;
     protected int tally;
-    protected ArrayList<Card> tableArray;
+    protected Card[] tableArray;
     public final int THROW_STAGE = 1;
     public final int COUNT_STAGE = 3;
     public final int PEG_STAGE = 2;
@@ -35,13 +33,7 @@ class CbgState {
     public boolean isGameOver;
     public int MAX_TALLY = 31;
     public int MAX_SCORE = 121;
-   
-    
-    public CbgState(){
-    	super();
-    	tableArray = new ArrayList<Card>();
-    }
-    
+
     public final void setScore(int score, int player) {
     	if (player == PLAYER_1){
     		player1Score = score;
@@ -80,7 +72,7 @@ class CbgState {
     	this.deck = deck;
     }
 
-    public final void setTable(ArrayList<Card> table) {
+    public final void setTable(Card[] table) {
     	this.tableArray = table;
     }
 
@@ -120,7 +112,7 @@ class CbgState {
     
     }
 
-    public final ArrayList<Card> getTable() {
+    public final Card[] getTable() {
     	return tableArray;
     
     }
@@ -148,7 +140,9 @@ class CbgState {
     
     }
 
-
+    public final int getGameStage() {
+    	return gameStage;
+    }
    
     public void isGameOver(){
     	if(player1Score >= MAX_SCORE){
@@ -160,28 +154,6 @@ class CbgState {
     		setWinner(PLAYER_2);
     	}
     }
-    
-    public final int getGameStage() {
-    	int p1Counter = 0;
-    	int p2Counter = 0;
-    	for(int i = 0; i<player1Hand.length; i++){
-    		if(player1Hand[i] != null){
-    			p1Counter++;
-    		}
-    		if(player2Hand[i] != null){
-    			p2Counter++;
-    		}
-    	}
-    	if(p1Counter == 6 && p2Counter == 6){
-    		return THROW_STAGE;
-    	}else if(p1Counter <= 4 && p2Counter <= 4) {
-    		return PEG_STAGE;
-    	}else if (p1Counter == 0 && p2Counter ==0){
-    		return COUNT_STAGE;
-    	}
-    	return gameStage;
-    }//getGameStage
-    
     public int getWinner(){
     	return winner;
     }
