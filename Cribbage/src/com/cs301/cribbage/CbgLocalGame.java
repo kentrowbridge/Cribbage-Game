@@ -72,16 +72,16 @@ class CbgLocalGame extends LocalGame{
 				CbgCounter counter = new CbgCounter();
 				
 				if (state.cribOwner == state.PLAYER_1) {
-					state.setScore(state.player2Score + counter.count5(state.player2Hand, state.bonusCard), state.PLAYER_2);// counting player 2 hand
+					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);// counting player 2 hand
 					checkIfGameOver();
-					state.setScore(state.player1Score + counter.count5(state.player1Hand, state.bonusCard), state.PLAYER_1);// counting player 1 hand
-					state.setScore(state.player1Score + counter.count5(state.crib, state.bonusCard), state.PLAYER_1);// counting crib hand for player 1 
+					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);// counting player 1 hand
+					state.setScore(state.player1Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_1);// counting crib hand for player 1 
 					checkIfGameOver();
 				} else {
-					state.setScore(state.player1Score + counter.count5(state.player1Hand, state.bonusCard), state.PLAYER_1);
+					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);
 					checkIfGameOver();
-					state.setScore(state.player2Score + counter.count5(state.player2Hand, state.bonusCard), state.PLAYER_2);
-					state.setScore(state.player2Score + counter.count5(state.crib, state.bonusCard), state.PLAYER_2);
+					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);
+					state.setScore(state.player2Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_2);
 					checkIfGameOver();
 				}
 				state.gameStage = state.THROW_STAGE;
@@ -116,7 +116,7 @@ class CbgLocalGame extends LocalGame{
 			cardArr = state.getTable();  // get table
 			
 			// is the card a valid card to play? If so, proceed. If not, gracefully take care of the situation.
-			if (cards.cardsToTable.getRank().intCountValue() + state.tally > 31) {
+			if (cards.cards().getRank().intCountValue() + state.tally > 31) {
 				// The card is invalid
 				//TODO insert text sent to the text field here to inform the player of the error.
 
@@ -124,7 +124,7 @@ class CbgLocalGame extends LocalGame{
 				// The card is valid
 				cardArr.add(cards.cards()); //add card
 				state.setTable(cardArr); //send back to gamestate
-				state.tally += cards.cardsToTable.getRank().intCountValue();
+				state.tally += cards.cards().getRank().intCountValue();
 				sendUpdatedStateTo(action.getPlayer());
 				
 				// update the score
@@ -143,11 +143,11 @@ class CbgLocalGame extends LocalGame{
 					for (int i = 0; i < 8; ++i) {
 						
 						// if player 2 was the last to play, and the particular card in the hand is not null, and that card would be a valid card, no go point is awarded
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_2 && state.player1Hand[i] != null && state.player1Hand[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_2 && state.getHand(state.PLAYER_2)[i] != null && state.getHand(state.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
 							getGoPoint = false;
 							break;
 						}
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1 && state.player2Hand[i] != null && state.player2Hand[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1 && state.getHand(state.PLAYER_2)[i] != null && state.getHand(state.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
 							getGoPoint = false;
 							break;
 						}
