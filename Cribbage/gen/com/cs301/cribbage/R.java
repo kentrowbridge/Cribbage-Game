@@ -98,7 +98,6 @@ public final class R {
         public static final int Player1progress=0x7f090009;
         public static final int addPlayerButton=0x7f09001d;
         public static final int backButton2=0x7f090012;
-<<<<<<< HEAD
         public static final int button1=0x7f09000a;
         public static final int button2=0x7f09000b;
         public static final int configTableLayout=0x7f090017;
@@ -110,19 +109,6 @@ public final class R {
         public static final int localTabLayout=0x7f090014;
         public static final int menu_settings=0x7f090027;
         public static final int p1HandSV=0x7f09000d;
-=======
-        public static final int configTableLayout=0x7f090017;
-        public static final int confirmButton=0x7f09000b;
-        public static final int cribSurface=0x7f09000e;
-        public static final int deckSurface=0x7f09000c;
-        public static final int delPlayerButton=0x7f090021;
-        public static final int handSurface=0x7f09000d;
-        public static final int ipCodeLabel=0x7f090019;
-        public static final int localGameTab=0x7f090013;
-        public static final int localTabLayout=0x7f090014;
-        public static final int menuButton=0x7f09000a;
-        public static final int menu_settings=0x7f090027;
->>>>>>> e8d9fac3aaba63b841aa895412c85245d4d43b0d
         public static final int p1ScoreText=0x7f090007;
         public static final int p1score=0x7f090008;
         public static final int p2Score=0x7f090005;
@@ -143,11 +129,7 @@ public final class R {
         public static final int tabHost=0x7f09000f;
         public static final int tableDataRow=0x7f090022;
         public static final int tableHeadingRow=0x7f09001a;
-<<<<<<< HEAD
         public static final int tableSV=0x7f090000;
-=======
-        public static final int tableSurface=0x7f090000;
->>>>>>> e8d9fac3aaba63b841aa895412c85245d4d43b0d
         public static final int tallyCount=0x7f090002;
         public static final int tallyCountTxt=0x7f090001;
         public static final int textView1=0x7f090018;
