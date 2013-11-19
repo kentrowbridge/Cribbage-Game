@@ -1,30 +1,34 @@
 package com.cs301.cribbage;
+import java.util.ArrayList;
+
 import android.util.Log;
 import edu.up.cs301.card.*;
+import edu.up.cs301.game.infoMsg.GameState;
 
-/* 
-   
- */
-
-
-class CbgState {
-	public static final int PLAYER_1 = 1;//player constants
-	public static final int PLAYER_2 = 2;
+class CbgState extends GameState{
+	public static final int PLAYER_1 = 0;//player constants
+	public static final int PLAYER_2 = 1;
     private Card[] player1Hand;
     private Card[] player2Hand;
     private Card[] crib;
     private Deck deck;
     private Card bonusCard;
-    private int gameStage;
+    public int gameStage;
     private int winner;
     protected int player1Score;
     protected int player2Score;
     protected int tally;
-    protected Card[] tableArray;
-    public final int THROW_STAGE = 1;
-    public final int COUNT_STAGE = 3;
-    public final int PEG_STAGE = 2;
+    protected ArrayList<Card> tableArray;
+    public final int THROW_STAGE = 0;
+    public final int PEG_STAGE = 1;
+    public final int COUNT_STAGE = 2;
     public int cribOwner;
+    public final String[] tutorialTexts = {
+    		"It is now the Throw Stage. Please select two cards to throw to the crib",
+    		"It is now the Peg Stage. Please select one card at a time to send to the table",
+    		"It is now the Count Stage. The cards are being counted."
+    };
+    
 
     /*
      * Set after score bar is updated, if score exceeds max points this is set to true.
@@ -33,7 +37,13 @@ class CbgState {
     public boolean isGameOver;
     public int MAX_TALLY = 31;
     public int MAX_SCORE = 121;
-
+   
+    
+    public CbgState(){
+    	super();
+    	tableArray = new ArrayList<Card>();
+    }
+    
     public final void setScore(int score, int player) {
     	if (player == PLAYER_1){
     		player1Score = score;
@@ -72,7 +82,7 @@ class CbgState {
     	this.deck = deck;
     }
 
-    public final void setTable(Card[] table) {
+    public final void setTable(ArrayList<Card> table) {
     	this.tableArray = table;
     }
 
@@ -112,7 +122,7 @@ class CbgState {
     
     }
 
-    public final Card[] getTable() {
+    public final ArrayList<Card> getTable() {
     	return tableArray;
     
     }
@@ -140,9 +150,7 @@ class CbgState {
     
     }
 
-    public final int getGameStage() {
-    	return gameStage;
-    }
+
    
     public void isGameOver(){
     	if(player1Score >= MAX_SCORE){
@@ -154,6 +162,28 @@ class CbgState {
     		setWinner(PLAYER_2);
     	}
     }
+    
+    public final int getGameStage() {
+    	int p1Counter = 0;
+    	int p2Counter = 0;
+    	for(int i = 0; i<player1Hand.length; i++){
+    		if(player1Hand[i] != null){
+    			p1Counter++;
+    		}
+    		if(player2Hand[i] != null){
+    			p2Counter++;
+    		}
+    	}
+    	if(p1Counter == 6 && p2Counter == 6){
+    		return THROW_STAGE;
+    	}else if(p1Counter <= 4 && p2Counter <= 4) {
+    		return PEG_STAGE;
+    	}else if (p1Counter == 0 && p2Counter ==0){
+    		return COUNT_STAGE;
+    	}
+    	return gameStage;
+    }//getGameStage
+    
     public int getWinner(){
     	return winner;
     }
