@@ -269,7 +269,7 @@ class CbgLocalGame extends LocalGame{
 			else return "ERROR";//if something horrible happens
 		}
 
-		return "FALSE";//if game is not over
+		return null;//if game is not over
 	}
 	
 	private void switchTurn(){//switches the turn
