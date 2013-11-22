@@ -162,7 +162,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			}
 		}
 		else if(state.getGameStage() == CbgState.PEG_STAGE){
-			toTable = c;
+			toTable = c;//sets card to be sent to table
 		}
 	}
 
