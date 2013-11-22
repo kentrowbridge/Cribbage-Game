@@ -1,3 +1,3 @@
 Cribbage-Game
 =============
-This be a readme, arr!
+The app starts in the oncreate method of GameMainActivity
