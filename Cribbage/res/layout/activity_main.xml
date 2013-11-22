@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:name="Cribbage"
     xmlns:tools="http://schemas.android.com/tools"
+    android:name="Cribbage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
@@ -10,19 +10,20 @@
     android:layout_marginTop="0dp"
     android:background="#228b22"
     android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
     android:paddingRight="10dp"
+    android:paddingLeft= "10dp"
     android:paddingTop="10dp"
     tools:context=".MainActivity" >
 
     <edu.up.cs301.animation.AnimationSurface
-        android:id="@+id/tableView"
+        android:id="@+id/mainAS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:background="#228b22" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,16 +47,10 @@
                 android:layout_weight="1"
                 android:orientation="horizontal" >
 
-                <android.support.v7.widget.Space
-                    android:id="@+id/space1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
                 <FrameLayout
-                    android:layout_width="10dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0" >
+                    android:layout_weight="1" >
                 </FrameLayout>
 
                 <LinearLayout
@@ -80,10 +75,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0"
-                                android:background="#0000ff"
                                 android:text="Tally Count:"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:textSize="20sp" />
+                                android:textSize="20sp" 
+                                android:textColor="#ffffff"/>
 
                             <TextView
                                 android:id="@+id/tallyCount"
@@ -91,9 +86,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:background="#00f0f0"
                                 android:text="COUNT"
-                                android:textSize="20sp" />
+                                android:textSize="20sp"
+                                android:textColor="#ffffff" />
                         </LinearLayout>
 
                         <FrameLayout
@@ -108,19 +103,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="#00ff00"
                             android:text="Tutorial Box"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="#ffffff" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_weight="0" >
-        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,19 +132,19 @@
                         android:id="@+id/p2ScoreText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#ff0000"
                         android:text="P2 Score: "
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="25sp" />
+                        android:textSize="25sp" 
+                        android:textColor="#ffffff"/>
 
                     <TextView
                         android:id="@+id/p2Score"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:background="#00ffff"
                         android:text="SCORE"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="25sp" />
+                        android:textSize="25sp" 
+                        android:textColor="#ffffff"/>
 
                     <ProgressBar
                         android:id="@+id/player2progress"
@@ -178,19 +167,19 @@
                         android:id="@+id/p1ScoreText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#ff0000"
                         android:text="P1 Score: "
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="25sp" />
+                        android:textSize="25sp"
+                        android:textColor="#ffffff" />
 
                     <TextView
                         android:id="@+id/p1score"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:background="#00ffff"
                         android:text="SCORE"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textSize="25sp" />
+                        android:textSize="25sp"
+                        android:textColor="#ffffff" />
 
                     <ProgressBar
                         android:id="@+id/Player1progress"
@@ -217,13 +206,13 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/menuButton"
+                    android:id="@+id/quitButton"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="Menu"
+                    android:text="Quit"
                     android:textSize="20sp" />
 
                 <Button
@@ -238,17 +227,12 @@
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_weight="0" >
-        </FrameLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
