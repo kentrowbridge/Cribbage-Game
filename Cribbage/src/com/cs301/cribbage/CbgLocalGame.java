@@ -29,9 +29,6 @@ class CbgLocalGame extends LocalGame{
 		deal();
 		state.setTurn(CbgState.PLAYER_1);
 		state.setGameOver(false);
-
-
-
 	}
 
 	//	private void gameCycle()
