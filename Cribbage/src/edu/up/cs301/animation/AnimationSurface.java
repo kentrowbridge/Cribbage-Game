@@ -268,5 +268,6 @@ public class AnimationSurface extends SurfaceView implements OnTouchListener {
 		}
 		return true;
 	};// class AnimationThread
-
+	
+	
 }// class AnimationSurface
