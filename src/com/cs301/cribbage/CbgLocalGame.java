@@ -92,39 +92,40 @@ class CbgLocalGame extends LocalGame{
 				// The card is valid
 				cardArr.add(cards.cards()); //add card
 				state.setTable(cardArr); //send back to gamestate
-				state.tally += cards.cards().getRank().intCountValue();
+				state.setTally(state.getTally() + cards.cards().getRank().intCountValue());
 				sendUpdatedStateTo(action.getPlayer());
 
 				// update the score
-				if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1) 
-					state.player1Score += CbgCounter.countTable(cardArr.toArray(new Card[8])); 
-				else state.player2Score += CbgCounter.countTable(cardArr.toArray(new Card[8]));
+				if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1) 
+					state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_1) + CbgCounter.countTable(cardArr.toArray(new Card[8]))); 
+				else state.setScore(CbgState.PLAYER_2, state.getScore(CbgState.PLAYER_2) + CbgCounter.countTable(cardArr.toArray(new Card[8])));
 
 				// check for a 31
 				if(state.tally == 31) {
-					if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1)
-						state.player1Score += 2;
-					else state.player2Score += 2;
+					if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1)
+						state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_1) + 2);
+					else state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_2) + 2);
+
 
 				} else {// check for the go
 					boolean getGoPoint = true;
 					for (int i = 0; i < 8; ++i) {
 
 						// if player 2 was the last to play, and the particular card in the hand is not null, and that card would be a valid card, no go point is awarded
-						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.getTally() <= 31) {
 							getGoPoint = false;
 							break;
 						}
-						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.getTally() <= 31) {
 							getGoPoint = false;
 							break;
 						}
 					}
 					if (getGoPoint) {
 						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1)
-							state.player1Score += 1;
+							state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_1) + 1);
 						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2)
-							state.player2Score += 1;
+							state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_2) +1);
 					}
 				}
 
@@ -247,11 +248,7 @@ class CbgLocalGame extends LocalGame{
 		}
 		return isEmpty;
 	}
-	
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> fc2dc8d027413ed6a1026dbec4093af74e8870cd
+
 
 
 	private void count(){				{
@@ -274,12 +271,3 @@ class CbgLocalGame extends LocalGame{
 	}
 	}
 }
-<<<<<<< HEAD
-=======
-	private void count(){
-		
-	}
-}
->>>>>>> 5fedb087a2828fcd9f23112f4b75ba50dad171ac
-=======
->>>>>>> fc2dc8d027413ed6a1026dbec4093af74e8870cd
