@@ -138,7 +138,7 @@ class CbgLocalGame extends LocalGame{
 					count();
 				}				
 				
-				sendUpdatedStateTo(action.getPlayer());
+				sendAllUpdatedState();
 				switchTurn();
 				// send the state back to the player
 				// to change the GUI accordingly
@@ -168,8 +168,7 @@ class CbgLocalGame extends LocalGame{
 			if(throwCount >= 2){
 				state.setGameStage(CbgState.PEG_STAGE);
 			}
-			//sendUpdatedStateTo(action.getPlayer());
-			//sendUpdatedStateTo(action.getPlayer());
+			sendAllUpdatedState();
 			return true;
 		}
 		return false;
@@ -219,7 +218,7 @@ class CbgLocalGame extends LocalGame{
 				return ("Player 1 won with " + state.getScore(CbgState.PLAYER_1) + " points.");
 			}
 			else if(winner == CbgState.PLAYER_2){
-				return ("Player 2 won with " + state.getScore(CbgState.PLAYER_2) + " points.");
+				return ("Player 2 won with " + state.getScore(CbgState.PLAYER_1) + " points.");
 			}
 			else return "ERROR";//if something horrible happens
 		}
@@ -238,7 +237,7 @@ class CbgLocalGame extends LocalGame{
 	}
 
 
-	private boolean checkNextStage(){
+	private boolean checkCountStage(){
 		boolean isEmpty = true;
 		for(Card c : state.getHand(CbgState.PLAYER_1)){
 			if(c != null){
@@ -252,10 +251,8 @@ class CbgLocalGame extends LocalGame{
 		}
 		return isEmpty;
 	}
-
-
-
-	private void count(){				{
+	
+	private void count(){				
 		//after the score has been tallied, checks if the game is over
 		if(state.getGameOver()) return;
 		if (state.cribOwner == CbgState.PLAYER_1) {
@@ -272,6 +269,5 @@ class CbgLocalGame extends LocalGame{
 			checkIfGameOver();
 		}
 		state.setGameStage(CbgState.THROW_STAGE);
-	}
 	}
 }
