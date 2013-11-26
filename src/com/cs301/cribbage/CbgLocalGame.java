@@ -116,7 +116,7 @@ class CbgLocalGame extends LocalGame{
 							getGoPoint = false;
 							break;
 						}
-						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.getTally() <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.getTally() <= 31) {
 							getGoPoint = false;
 							break;
 						}
@@ -125,7 +125,7 @@ class CbgLocalGame extends LocalGame{
 						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1)
 							state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_1) + 1);
 						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2)
-							state.setScore(CbgState.PLAYER_1,state.getScore(CbgState.PLAYER_2) +1);
+							state.setScore(CbgState.PLAYER_2,state.getScore(CbgState.PLAYER_2) +1);
 					}
 				}
 
@@ -215,7 +215,7 @@ class CbgLocalGame extends LocalGame{
 				return ("Player 1 won with " + state.getScore(CbgState.PLAYER_1) + " points.");
 			}
 			else if(winner == CbgState.PLAYER_2){
-				return ("Player 2 won with " + state.getScore(CbgState.PLAYER_1) + " points.");
+				return ("Player 2 won with " + state.getScore(CbgState.PLAYER_2) + " points.");
 			}
 			else return "ERROR";//if something horrible happens
 		}
