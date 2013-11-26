@@ -27,12 +27,6 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		super(name);
 
 	}
-	/*private final int count4(Card[] table) {
-		int count = 0;
-
-		return count;
-	}*/
-
 
 	/**
 	 * This function throws two selected cards from an initial hand of 6
@@ -256,13 +250,17 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 	private void takeTurn(){
 		action = null;
+		
+		// fill the action depending on the stage.
 		if(state.getGameStage() == CbgState.THROW_STAGE){
 			action = new CardsToThrow(this,selectedThrow(state.getHand(), CbgState.PLAYER_2, state));
 		}
 		else if (state.getGameStage() == CbgState.PEG_STAGE){
 			action = new CardsToTable(this, selectedCardToTable(state.getHand(), state.getTable().toArray(new Card[8])));
-
 		}
+		
+		// don't forget to send the action!
+		game.sendAction(action);
 
 	}
 }
