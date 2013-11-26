@@ -107,7 +107,7 @@ class CbgLocalGame extends LocalGame{
 			ArrayList<Card> cardArr = new ArrayList<Card>(); 
 			CardsToTable cards = (CardsToTable) action;
 			cardArr = state.getTable();  // get table
-			
+
 			cardArr.add(cards.cards());
 			state.setTable(cardArr);
 
@@ -155,8 +155,15 @@ class CbgLocalGame extends LocalGame{
 							state.player2Score += 1;
 					}
 				}
-				checkIfGameOver();
 
+
+				checkIfGameOver();
+				if(checkNextStage()){
+					state.setGameStage(CbgState.COUNT_STAGE);
+				}
+				if(state.getGameStage() == CbgState.COUNT_STAGE){
+					count();
+				}
 				switchTurn();
 
 				// send the state back to the player
@@ -166,7 +173,7 @@ class CbgLocalGame extends LocalGame{
 				// the action has been handled correctly
 				return true;
 			}
-			
+
 		}
 		else if (action instanceof CardsToThrow ){//TODO make so checks for can move
 			CardsToThrow cards = (CardsToThrow) action;
@@ -248,4 +255,23 @@ class CbgLocalGame extends LocalGame{
 		else Log.i("ERROR", "Player number is broken");
 	}
 
+
+	private boolean checkNextStage(){
+		boolean isEmpty = true;
+		for(Card c : state.getHand(CbgState.PLAYER_1)){
+			if(c != null){
+				isEmpty = false;
+			}
+		}
+		for(Card c : state.getHand(CbgState.PLAYER_2)){
+			if(c != null){
+				isEmpty = false;
+			}
+		}
+		return isEmpty;
+	}
+	
+	private void count(){
+		
+	}
 }
