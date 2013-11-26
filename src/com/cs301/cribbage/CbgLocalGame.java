@@ -125,8 +125,8 @@ class CbgLocalGame extends LocalGame{
 
 				// update the score
 				if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1) 
-					state.player1Score += CbgCounter.countTable((Card[])cardArr.toArray()); 
-				else state.player2Score += CbgCounter.countTable((Card[])cardArr.toArray());
+					state.player1Score += CbgCounter.countTable(cardArr.toArray(new Card[8])); 
+				else state.player2Score += CbgCounter.countTable(cardArr.toArray(new Card[8]));
 
 				// check for a 31
 				if(state.tally == 31) {
