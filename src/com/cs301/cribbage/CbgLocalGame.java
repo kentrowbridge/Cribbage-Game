@@ -177,15 +177,20 @@ class CbgLocalGame extends LocalGame{
 		}
 		else if (action instanceof CardsToThrow ){//TODO make so checks for can move
 			CardsToThrow cards = (CardsToThrow) action;
-			Card[] cardArr = new Card[4];
-			Card[] cardsThrown = cards.cards();
-			for(int i = 0; i < 2; i++){
-				cardArr[cardArr.length - 1] = cardsThrown[i];
+			Card[] cribArr = state.getCrib();//cards to set the crib
+			Card[] cardsThrown = cards.cards();//cards from most recent action
+			for(int i = 0; i < cardsThrown.length; i++){
+				for(int j = 0; j<cribArr.length;j++){
+					if(cribArr[j]==null){
+						cribArr[j] = cardsThrown[i];
+						break;
+					}
+				}
 			}
-			state.setCrib(cardArr);
+			state.setCrib(cribArr);
 			switchTurn();
 			throwCount++;
-			if(throwCount >= 1){
+			if(throwCount >= 2){
 				state.setGameStage(CbgState.PEG_STAGE);
 			}
 			return true;
