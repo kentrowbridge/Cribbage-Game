@@ -70,10 +70,11 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			action = new CardsToTable(this, selectedCards[0]);//sets action
 			tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
 		}
-		selectedCards[0] = null;
-		selectedCards[1] = null;
+		
 			
 		game.sendAction(action);//sends game action
+		selectedCards[0] = null;
+		selectedCards[1] = null;
 	}
 
 	private void updateDisplay(){

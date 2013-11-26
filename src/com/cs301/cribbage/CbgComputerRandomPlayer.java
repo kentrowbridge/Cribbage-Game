@@ -1,5 +1,6 @@
 package com.cs301.cribbage;
 
+import android.util.Log;
 import edu.up.cs301.card.Card;
 import edu.up.cs301.game.actionMsg.GameAction;
 import edu.up.cs301.game.infoMsg.GameInfo;
@@ -51,9 +52,12 @@ class CbgComputerRandomPlayer extends CbgComputerPlayer {
 
 	@Override
 	protected void receiveInfo(GameInfo info) {
+		Log.i("CPU","getting state...");
 		if(info instanceof CbgState){
 			state = (CbgState)info;	
+			Log.i("CPU","got state...");
 			if(state.getTurn() == state.PLAYER_2) {
+				Log.i("CPU","taking turn...");
 				takeTurn();
 			}// else do nothing
 		}
