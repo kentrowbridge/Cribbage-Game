@@ -171,6 +171,17 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		cardsOnTable = state.getTable();//gets cards on table
 		
 		//draws cards and the cover of the cards that have been sent away
+		drawHand(c);
+		
+		drawTable(c);
+
+		//highlights cards selected
+		for(Card selected: selectedCards){
+			if(selected != null){highLight(c, handCardPos[indexOfCard(tempHand, selected)]);}
+		}
+	}
+
+	private void drawHand(Canvas c) {
 		for(int i = 0; i < tempHand.length;i++){
 			if(tempHand[i] != null){//if card is null, dont draw it
 				tempHand[i].drawOn(c, handCardPos[i]);//draws the cards in each position
@@ -178,18 +189,19 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 				c.drawRect(handCardPos[i], new Paint(Color.BLACK));//covers up old cards
 			}
 		}
-		
-		for(int i = 0; i < cardsOnTable.size(); i++){
-			if(cardsOnTable.get(i)==null){
-				cardsOnTable.get(i).drawOn(c, tableCardPos[i]);//draws cards on table
-//			}else if(cardsOnTable[i] == null){
-//				c.drawRect(tableCardPos[i], new Paint(Color.RED));//draws red rectangle for null cards
-			}
-		}
+	}
 
-		//highlights cards selected
-		for(Card selected: selectedCards){
-			if(selected != null){highLight(c, handCardPos[indexOfCard(tempHand, selected)]);}
+	private void drawTable(Canvas c) {
+		if(!cardsOnTable.isEmpty()){//only if cards on table is non-empty
+			int count = 0;//counter for the graphics position of each card
+			for(Card tableCard: cardsOnTable){//iterate through the arraylist of cards on table
+				if(tableCard != null){
+					tableCard.drawOn(c, tableCardPos[count]);//draws cards on table
+				}else if(tableCard == null){
+					c.drawRect(tableCardPos[count], new Paint(Color.RED));//draws red rectangle for null cards
+				}
+				count++;
+			}
 		}
 	}
 
