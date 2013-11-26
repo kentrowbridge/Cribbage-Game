@@ -44,7 +44,7 @@ public class MainActivity extends GameMainActivity {
 		// a computer player type (player type 1)
 		playerTypes.add(new GamePlayerType("Computer Smart Player") {
 			public GamePlayer createPlayer(String name) {
-				return new CbgComputerRandomPlayer(name);
+				return new CbgComputerSmartPlayer(name);
 			}});
 		
 		// a computer player type (player type 2)
@@ -58,7 +58,7 @@ public class MainActivity extends GameMainActivity {
 		// - from 1 to 2 players
 		// - name of game is "Cbg Game"
 		// - port number as defined above
-		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 2, "Cbg Game",
+		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 2, "Cribbage",
 				PORT_NUMBER);
 
 		// Add the default players to the configuration

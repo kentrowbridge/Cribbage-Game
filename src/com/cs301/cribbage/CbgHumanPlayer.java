@@ -70,10 +70,11 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			action = new CardsToTable(this, selectedCards[0]);//sets action
 			tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
 		}
-		selectedCards[0] = null;
-		selectedCards[1] = null;
+		
 			
 		game.sendAction(action);//sends game action
+		selectedCards[0] = null;
+		selectedCards[1] = null;
 	}
 
 	private void updateDisplay(){
@@ -167,7 +168,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		throwPos[3] = new RectF(10*cardWidth               , height*2/3, 11*cardWidth, height);
 
 		//inits local variables from state variables (NEED THIS)
-		tempHand = state.getHand(state.PLAYER_1);
+		tempHand = state.getHand();
 		cardsOnTable = state.getTable();//gets cards on table
 		
 		//draws cards and the cover of the cards that have been sent away
@@ -260,7 +261,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 
 	@Override
 	public int interval() {
-		return 50;
+		return 10;
 	}
 
 	@Override
@@ -297,3 +298,4 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		}	
 	}
 }
+
