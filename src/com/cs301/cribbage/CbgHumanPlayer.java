@@ -167,7 +167,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		throwPos[3] = new RectF(10*cardWidth               , height*2/3, 11*cardWidth, height);
 
 		//inits local variables from state variables (NEED THIS)
-		tempHand = state.getHand(state.PLAYER_1);
+		tempHand = state.getHand();
 		cardsOnTable = state.getTable();//gets cards on table
 		
 		//draws cards and the cover of the cards that have been sent away
@@ -260,7 +260,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 
 	@Override
 	public int interval() {
-		return 50;
+		return 10;
 	}
 
 	@Override

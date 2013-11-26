@@ -56,31 +56,7 @@ class CbgLocalGame extends LocalGame{
 	//				
 	//				originalTally = state.getTally();
 	//				state.setTally(counter.getTally((Card[])state.getTable().toArray()));
-	//			}
-	//			while (state.getGameStage() == state.COUNT_STAGE)
-	//			{
-	//				//after the score has been tallied, checks if the game is over
-	//				if(state.getGameOver()) break;
-	//				CbgCounter counter = new CbgCounter();
-	//				
-	//				if (state.cribOwner == state.PLAYER_1) {
-	//					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);// counting player 2 hand
-	//					checkIfGameOver();
-	//					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);// counting player 1 hand
-	//					state.setScore(state.player1Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_1);// counting crib hand for player 1 
-	//					checkIfGameOver();
-	//				} else {
-	//					state.setScore(state.player1Score + counter.count5(state.getHand(state.PLAYER_1), state.getBonusCard()), state.PLAYER_1);
-	//					checkIfGameOver();
-	//					state.setScore(state.player2Score + counter.count5(state.getHand(state.PLAYER_2), state.getBonusCard()), state.PLAYER_2);
-	//					state.setScore(state.player2Score + counter.count5(state.getCrib(), state.getBonusCard()), state.PLAYER_2);
-	//					checkIfGameOver();
-	//				}
-	//				state.gameStage = state.THROW_STAGE;
-	//			}
-	//			
-	//		}//while (!state.getGameOver())
-	//	}//gameCycle
+
 
 	/*
 	 * Checks the boolean isGameOver in gameState, and if its true it sets the return string 
@@ -94,11 +70,7 @@ class CbgLocalGame extends LocalGame{
 
 		else return true;
 	}
-	//	private final int handCount() {
-	//		int count = 0;
-	//		// TODO maybe put in counter class?
-	//		return count;
-	//	}
+
 
 	@Override
 	protected final boolean makeMove(GameAction action) {//TODO remember to null the card in the person's hand
@@ -107,7 +79,7 @@ class CbgLocalGame extends LocalGame{
 			ArrayList<Card> cardArr = new ArrayList<Card>(); 
 			CardsToTable cards = (CardsToTable) action;
 			cardArr = state.getTable();  // get table
-			
+
 			cardArr.add(cards.cards());
 			state.setTable(cardArr);
 
@@ -125,8 +97,8 @@ class CbgLocalGame extends LocalGame{
 
 				// update the score
 				if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1) 
-					state.player1Score += CbgCounter.countTable((Card[])cardArr.toArray()); 
-				else state.player2Score += CbgCounter.countTable((Card[])cardArr.toArray());
+					state.player1Score += CbgCounter.countTable(cardArr.toArray(new Card[8])); 
+				else state.player2Score += CbgCounter.countTable(cardArr.toArray(new Card[8]));
 
 				// check for a 31
 				if(state.tally == 31) {
@@ -139,24 +111,31 @@ class CbgLocalGame extends LocalGame{
 					for (int i = 0; i < 8; ++i) {
 
 						// if player 2 was the last to play, and the particular card in the hand is not null, and that card would be a valid card, no go point is awarded
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_2 && state.getHand(state.PLAYER_2)[i] != null && state.getHand(state.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
 							getGoPoint = false;
 							break;
 						}
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1 && state.getHand(state.PLAYER_2)[i] != null && state.getHand(state.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1 && state.getHand(CbgState.PLAYER_2)[i] != null && state.getHand(CbgState.PLAYER_2)[i].getRank().intCountValue() + state.tally <= 31) {
 							getGoPoint = false;
 							break;
 						}
 					}
 					if (getGoPoint) {
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_1)
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_1)
 							state.player1Score += 1;
-						if (getPlayerIdx(action.getPlayer()) == state.PLAYER_2)
+						if (getPlayerIdx(action.getPlayer()) == CbgState.PLAYER_2)
 							state.player2Score += 1;
 					}
 				}
-				checkIfGameOver();
 
+
+				checkIfGameOver();
+				if(checkNextStage()){
+					state.setGameStage(CbgState.COUNT_STAGE);
+				}
+				if(state.getGameStage() == CbgState.COUNT_STAGE){
+					count();
+				}
 				switchTurn();
 
 				// send the state back to the player
@@ -166,19 +145,24 @@ class CbgLocalGame extends LocalGame{
 				// the action has been handled correctly
 				return true;
 			}
-			
+
 		}
 		else if (action instanceof CardsToThrow ){//TODO make so checks for can move
 			CardsToThrow cards = (CardsToThrow) action;
-			Card[] cardArr = new Card[4];
-			Card[] cardsThrown = cards.cards();
-			for(int i = 0; i < 2; i++){
-				cardArr[cardArr.length - 1] = cardsThrown[i];
+			Card[] cribArr = state.getCrib();//cards to set the crib
+			Card[] cardsThrown = cards.cards();//cards from most recent action
+			for(int i = 0; i < cardsThrown.length; i++){
+				for(int j = 0; j<cribArr.length;j++){
+					if(cribArr[j]==null){
+						cribArr[j] = cardsThrown[i];
+						break;
+					}
+				}
 			}
-			state.setCrib(cardArr);
+			state.setCrib(cribArr);
 			switchTurn();
 			throwCount++;
-			if(throwCount >= 1){
+			if(throwCount >= 2){
 				state.setGameStage(CbgState.PEG_STAGE);
 			}
 			return true;
@@ -248,4 +232,48 @@ class CbgLocalGame extends LocalGame{
 		else Log.i("ERROR", "Player number is broken");
 	}
 
+
+	private boolean checkNextStage(){
+		boolean isEmpty = true;
+		for(Card c : state.getHand(CbgState.PLAYER_1)){
+			if(c != null){
+				isEmpty = false;
+			}
+		}
+		for(Card c : state.getHand(CbgState.PLAYER_2)){
+			if(c != null){
+				isEmpty = false;
+			}
+		}
+		return isEmpty;
+	}
+	
+<<<<<<< HEAD
+
+
+	private void count(){				{
+		//after the score has been tallied, checks if the game is over
+		if(state.getGameOver()) return;
+		if (state.cribOwner == CbgState.PLAYER_1) {
+			state.setScore(state.player2Score + CbgCounter.count5(state.getHand(CbgState.PLAYER_2), state.getBonusCard()), CbgState.PLAYER_2);// counting player 2 hand
+			checkIfGameOver();
+			state.setScore(state.player1Score + CbgCounter.count5(state.getHand(CbgState.PLAYER_1), state.getBonusCard()), CbgState.PLAYER_1);// counting player 1 hand
+			state.setScore(state.player1Score + CbgCounter.count5(state.getCrib(), state.getBonusCard()), CbgState.PLAYER_1);// counting crib hand for player 1 
+			checkIfGameOver();
+		} else {
+			state.setScore(state.player1Score + CbgCounter.count5(state.getHand(CbgState.PLAYER_1), state.getBonusCard()), CbgState.PLAYER_1);
+			checkIfGameOver();
+			state.setScore(state.player2Score + CbgCounter.count5(state.getHand(CbgState.PLAYER_2), state.getBonusCard()), CbgState.PLAYER_2);
+			state.setScore(state.player2Score + CbgCounter.count5(state.getCrib(), state.getBonusCard()), CbgState.PLAYER_2);
+			checkIfGameOver();
+		}
+		state.setGameStage(CbgState.THROW_STAGE);
+	}
+	}
 }
+=======
+	private void count(){
+		
+	}
+}
+>>>>>>> 5fedb087a2828fcd9f23112f4b75ba50dad171ac
