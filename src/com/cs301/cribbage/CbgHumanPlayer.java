@@ -1,7 +1,6 @@
 package com.cs301.cribbage;
 
 import java.util.ArrayList;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -46,7 +45,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private RectF[] throwPos = new RectF[4];//position of cards in crib
 	private Card[] tempHand;//temporary hand for changing	
 	private Card[] selectedCards = new Card[2];
-	private ArrayList<Card> cardsOnTable;//arraylist of cards currently on the table
+	private Card[] cardsOnTable;//arraylist of cards currently on the table
 	private GameAction action;//action that will be sent to the game
 
 	public CbgHumanPlayer(String name) {
@@ -70,9 +69,9 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			action = new CardsToTable(this, selectedCards[0]);//sets action
 			tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
 		}
-		
-			
 		game.sendAction(action);//sends game action
+		
+		//resets selected cards
 		selectedCards[0] = null;
 		selectedCards[1] = null;
 	}
@@ -169,7 +168,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 
 		//inits local variables from state variables (NEED THIS)
 		tempHand = state.getHand();
-		cardsOnTable = state.getTable();//gets cards on table
+		cardsOnTable = state.getTable().toArray(new Card[8]);//gets cards on table
 		
 		//draws cards and the cover of the cards that have been sent away
 		drawHand(c);
@@ -193,16 +192,14 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	}
 
 	private void drawTable(Canvas c) {
-		if(!cardsOnTable.isEmpty()){//only if cards on table is non-empty
-			int count = 0;//counter for the graphics position of each card
-			for(Card tableCard: cardsOnTable){//iterate through the arraylist of cards on table
-				if(tableCard != null){
-					tableCard.drawOn(c, tableCardPos[count]);//draws cards on table
-				}else if(tableCard == null){
-					c.drawRect(tableCardPos[count], new Paint(Color.RED));//draws red rectangle for null cards
-				}
-				count++;
+		int count = 0;//counter for the graphics position of each card
+		for(Card tableCard: cardsOnTable){//iterate through the arraylist of cards on table
+			if(tableCard != null){
+				tableCard.drawOn(c, tableCardPos[count]);//draws cards on table
+			}else if(tableCard == null){
+				c.drawRect(tableCardPos[count], new Paint(Color.RED));//draws red rectangle for null cards
 			}
+			count++;
 		}
 	}
 
@@ -216,7 +213,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	}
 
 	private void selectCard(Card c) {		
-		if(state.getGameStage() == state.THROW_STAGE){
+		if(state.getGameStage() == state.THROW_STAGE && isFull(tempHand)){
 			if(selectedCards[0] == c){
 				selectedCards[0] = null;//selects
 			}else if(selectedCards[1] == c){
@@ -225,7 +222,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 				selectedCards[0] = c;//deselects
 			}else if(selectedCards[1] == null){
 				selectedCards[1] = c;//deselects
-			}
+			}			
 		}else if(state.getGameStage() == state.PEG_STAGE){
 			if(selectedCards[0] == null){
 				selectedCards[0] = c;//selects
@@ -261,7 +258,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 
 	@Override
 	public int interval() {
-		return 10;
+		return 50;
 	}
 
 	@Override
@@ -276,19 +273,19 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 
 	@Override
 	public void onTouch(MotionEvent event) {
-		if(event.getAction() == event.ACTION_DOWN){
+		if(event.getAction() == MotionEvent.ACTION_DOWN){
 			float x = event.getX();
 			float y = event.getY();	
 
-			if(state != null && state.getGameStage() == CbgState.THROW_STAGE && state.getTurn() == state.PLAYER_1){//checks if state is not null, cecks stage
-				//and checks whose turn it is
+			if(state != null && state.getGameStage() == CbgState.THROW_STAGE && state.getTurn() == CbgState.PLAYER_1){//checks if state is not null, cecks stage
+				//and checks whose turn it is				
 				for(int i = 0; i<tempHand.length; i++){
 					if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
-						selectCard(tempHand[i]);//selects card in 
+						selectCard(tempHand[i]);//selects card in 						
 					}
 				}
 			}
-			if(state != null && state.getGameStage() == CbgState.PEG_STAGE && state.getTurn() == state.PLAYER_1){
+			if(state != null && state.getGameStage() == CbgState.PEG_STAGE && state.getTurn() == CbgState.PLAYER_1){
 				for(int i = 0; i<tempHand.length;i++){
 					if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
 						selectCard(tempHand[i]);
@@ -298,4 +295,3 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		}	
 	}
 }
-
