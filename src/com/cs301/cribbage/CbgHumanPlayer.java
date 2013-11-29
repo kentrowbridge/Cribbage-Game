@@ -1,5 +1,9 @@
 package com.cs301.cribbage;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -45,7 +49,10 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private Card[] tempHand;//temporary hand for changing	
 	private Card[] selectedCards = new Card[2];
 	private Card[] cardsOnTable;//arraylist of cards currently on the table
+<<<<<<< HEAD
 	private Card[] currCrib;
+=======
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 	private GameAction action;//action that will be sent to the game
 
 	public CbgHumanPlayer(String name) {
@@ -177,7 +184,10 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		//inits local variables from state variables
 		tempHand = state.getHand();
 		cardsOnTable = state.getTable().toArray(new Card[8]);//gets cards on table
+<<<<<<< HEAD
 		currCrib = state.getCrib();		
+=======
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 		
 		//draws cards and the cover of the cards that have been sent away
 		drawHand(c);
@@ -229,12 +239,22 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @param c  canvas to draw on
 	 */
 	private void drawTable(Canvas c) {
+<<<<<<< HEAD
 		for(int i = 0; i<cardsOnTable.length;i++){//iterate through the arraylist of cards on table
 			if(cardsOnTable[i] != null){
 				cardsOnTable[i].drawOn(c, tableCardPos[i]);//draws cards on table
 			}else if(cardsOnTable[i] == null){
 				c.drawRect(tableCardPos[i], new Paint(Color.RED));//draws red rectangle for null cards
+=======
+		int count = 0;//counter for the graphics position of each card
+		for(Card tableCard: cardsOnTable){//iterate through the arraylist of cards on table
+			if(tableCard != null){
+				tableCard.drawOn(c, tableCardPos[count]);//draws cards on table
+			}else if(tableCard == null){
+				c.drawRect(tableCardPos[count], new Paint(Color.RED));//draws red rectangle for null cards
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 			}
+			count++;
 		}
 	}
 	
@@ -252,6 +272,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		}
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Method that handles selecting a card that the user has chosen.
 	 * If the card has not been already chosen, it adds that card to the cards selected (Max 2)
@@ -261,15 +282,26 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private void selectCard(Card card) {		
 		if(state.getGameStage() == CbgState.THROW_STAGE && isFull(tempHand)){
 			if(selectedCards[0] == card){
+=======
+	private void selectCard(Card c) {		
+		if(state.getGameStage() == state.THROW_STAGE && isFull(tempHand)){
+			if(selectedCards[0] == c){
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 				selectedCards[0] = null;//selects
 			}else if(selectedCards[1] == card){
 				selectedCards[1] = null;//selects
 			}else if(selectedCards[0] == null){
 				selectedCards[0] = card;//deselects
 			}else if(selectedCards[1] == null){
+<<<<<<< HEAD
 				selectedCards[1] = card;//deselects
 			}			
 		}else if(state.getGameStage() == CbgState.PEG_STAGE){
+=======
+				selectedCards[1] = c;//deselects
+			}			
+		}else if(state.getGameStage() == state.PEG_STAGE){
+>>>>>>> cf5465cc3d818743a094744aeeffa8900921da9f
 			if(selectedCards[0] == null){
 				selectedCards[0] = card;//selects
 			}else if(selectedCards[0] == card){
