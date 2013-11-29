@@ -16,12 +16,12 @@ class CbgState extends GameState{
 	private Deck deck;
 	private Card bonusCard;
 	private int throwCount;
-	public int gameStage;
+	private int gameStage;
 	private int winner;
-	protected int player1Score;
-	protected int player2Score;
-	protected int tally;
-	protected ArrayList<Card> tableArray;
+	private int player1Score;
+	private int player2Score;
+	private int tally;
+	private ArrayList<Card> tableArray;
 	public static final int THROW_STAGE = 0;
 	public static final int PEG_STAGE = 1;
 	public static final int COUNT_STAGE = 2;
