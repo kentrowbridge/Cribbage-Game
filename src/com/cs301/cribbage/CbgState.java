@@ -16,12 +16,12 @@ class CbgState extends GameState{
 	private Deck deck;
 	private Card bonusCard;
 	private int throwCount;
-	public int gameStage;
+	private int gameStage;
 	private int winner;
-	protected int player1Score;
-	protected int player2Score;
-	protected int tally;
-	protected ArrayList<Card> tableArray;
+	private int player1Score;
+	private int player2Score;
+	private int tally;
+	private ArrayList<Card> tableArray;
 	public static final int THROW_STAGE = 0;
 	public static final int PEG_STAGE = 1;
 	public static final int COUNT_STAGE = 2;
@@ -94,10 +94,25 @@ class CbgState extends GameState{
 		}
 		isGameOver();//checks if game is over when score is changed
 	}
+	public final void addScore(int score, int player) {
+		if (player == PLAYER_1){
+			player1Score += score;
+		}
+		else if (player == PLAYER_2){
+			player2Score += score;
+		}
+		else {
+			Log.i("Player error", "Error, there is no player " + player);
+		}
+		isGameOver();//checks if game is over when score is changed
+	}
 
 	public final void setTally(int tally) {
 		this.tally = tally;
 
+	}
+	public final void addTally(int tally){
+		this.tally += tally;
 	}
 	public final void setHand(Card[] hand) {
 		playerHand = hand;

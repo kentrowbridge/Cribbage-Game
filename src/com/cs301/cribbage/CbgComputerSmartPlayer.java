@@ -27,12 +27,6 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		super(name);
 
 	}
-	/*private final int count4(Card[] table) {
-		int count = 0;
-
-		return count;
-	}*/
-
 
 	/**
 	 * This function throws two selected cards from an initial hand of 6
@@ -141,8 +135,17 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		return topHand;
 	} // end countToThrow(Card card[]) 
 
-	// counts the score when handed a hand of 4 cards
-	// player represents the player who is counting his cards. This is used to determine if the player owns the crib.
+	/**
+	 * TODO this needs to go inside local game
+	 * s counts the score when handed a hand of 4 cards
+	 * player represents the player who is counting his cards. This is used to determine if the player owns the crib.
+	 * @param hand  hand to select card out of
+	 * @param toCrib  TODO what is this
+	 * @param player  
+	 * @param state
+	 * @return
+	 */
+	// 
 	public int count4(Card[] hand, Card[] toCrib, int player, CbgState state)
 	{
 		// check that there are the proper number of cards in the hand
@@ -248,7 +251,7 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 	protected void receiveInfo(GameInfo info) {
 		if(info instanceof CbgState){
 			state = (CbgState)info;	
-			if(state.getTurn() == state.PLAYER_2) {
+			if(state.getTurn() == CbgState.PLAYER_2) {
 				takeTurn();
 			}// else do nothing
 		}
@@ -256,13 +259,17 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 	private void takeTurn(){
 		action = null;
+		
+		// fill the action depending on the stage.
 		if(state.getGameStage() == CbgState.THROW_STAGE){
 			action = new CardsToThrow(this,selectedThrow(state.getHand(), CbgState.PLAYER_2, state));
 		}
 		else if (state.getGameStage() == CbgState.PEG_STAGE){
 			action = new CardsToTable(this, selectedCardToTable(state.getHand(), state.getTable().toArray(new Card[8])));
-
 		}
+		
+		// don't forget to send the action!
+		game.sendAction(action);
 
 	}
 }
