@@ -1,0 +1,16 @@
+Start Game
+init static variables
+shuffle deck
+deal
+Hand == 6
+Throw
+Hand == 4
+Peg
+Hand == 0
+Count
+	Count cards on P1 table + bonus
+	Count carsd on p2 table + bonus
+	Count and score crib
+Send updated state (new player scores)
+	(game could end here)
+--> back to shuffe deck

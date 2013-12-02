@@ -55,11 +55,6 @@ class CbgState extends GameState{
 		deck = deck.add52().shuffle();
 	}
 
-	/**
-	 * Method used to create a copy of the current state to send to players
-	 * This is usually used so we can null out certain areas that the players do not need to know
-	 * @param orig  original state to make a copy of
-	 */
 	public CbgState(CbgState orig){
 		super();
 		tableArray = new ArrayList<Card>();
@@ -99,10 +94,25 @@ class CbgState extends GameState{
 		}
 		isGameOver();//checks if game is over when score is changed
 	}
+	public final void addScore(int score, int player) {
+		if (player == PLAYER_1){
+			player1Score += score;
+		}
+		else if (player == PLAYER_2){
+			player2Score += score;
+		}
+		else {
+			Log.i("Player error", "Error, there is no player " + player);
+		}
+		isGameOver();//checks if game is over when score is changed
+	}
 
 	public final void setTally(int tally) {
 		this.tally = tally;
 
+	}
+	public final void addTally(int tally){
+		this.tally += tally;
 	}
 	public final void setHand(Card[] hand) {
 		playerHand = hand;
