@@ -249,7 +249,7 @@ class CbgLocalGame extends LocalGame{
 		return isEmpty;
 	}
 	
-	private void count(){				
+	private void count(){	
 		//after the score has been tallied, checks if the game is over
 		if(state.getGameOver()) return;
 		if (state.getCribOwner() == CbgState.PLAYER_1) {
@@ -275,6 +275,6 @@ class CbgLocalGame extends LocalGame{
 					state.getBonusCard()), CbgState.PLAYER_2);
 			checkIfGameOver();
 		}
-		state.setGameStage(CbgState.THROW_STAGE);
+		state.setGameStage(CbgState.THROW_STAGE); 
 	}
 }
