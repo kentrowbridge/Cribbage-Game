@@ -1,7 +1,5 @@
 package com.cs301.cribbage;
 
-
-import java.util.ArrayList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -43,12 +41,11 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private RectF[] tableCardPos = new RectF[10];//positions where table cards are drawn
 	private RectF[] throwPos = new RectF[4];//position of cards in crib
 	private RectF deckPos;
-
+	
 	private Card[] tempHand;//temporary hand for changing	
 	private Card[] selectedCards = new Card[2];
 	private Card[] cardsOnTable;//arraylist of cards currently on the table
 	private Card[] currCrib;
-
 	private GameAction action;//action that will be sent to the game
 
 	public CbgHumanPlayer(String name) {
@@ -71,14 +68,14 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 						tempHand[cardPos] = null;
 					}
 				}			
-				action = new CardsToThrow(this, selectedCards);//sets action
+			action = new CardsToThrow(this, selectedCards);//sets action
 			}
 		}else if(state.getGameStage() == CbgState.PEG_STAGE){//checks if game is in peg stage
 			action = new CardsToTable(this, selectedCards[0]);//sets action
 			tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
 		}
 		game.sendAction(action);//sends game action
-
+		
 		//resets selected cards
 		selectedCards[0] = null;
 		selectedCards[1] = null;
@@ -155,7 +152,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 */
 	public void tick(Canvas c) {
 		if (state == null) return;//if state is null, quit method
-
+		
 		Card bonusCard = state.getDeck().peekAtTopCard();//saves top card of deck
 		bonusCard.drawOn(c, new RectF(100, 100, 200, 0));//draws top card
 
@@ -163,15 +160,15 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		float height = c.getHeight();
 		//init rectangles for cards to be drawn on
 		deckPos = new RectF(0, height*2/3, cardWidth, height);
-
+		
 		for(int i = 0; i<handCardPos.length;i++){
 			handCardPos[i] = new RectF((i+1)*cardWidth, height*2/3, (i+2)*cardWidth, height);//inits pos of hand
 		}
-
+		
 		for(int j = 0;j<tableCardPos.length;j++){
 			tableCardPos[j] = new RectF(j*cardWidth, 0, (j+1)*cardWidth, height/3);//inits pos of table
 		}
-
+		
 		throwPos[0] = new RectF(9*cardWidth                , height*2/3, 10*cardWidth                , height);
 		throwPos[1] = new RectF(9*cardWidth + cardWidth/3  , height*2/3, 10*cardWidth + cardWidth/3  , height);
 		throwPos[2] = new RectF(9*cardWidth + cardWidth*2/3, height*2/3, 10*cardWidth + cardWidth*2/3, height);
@@ -181,16 +178,16 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		tempHand = state.getHand();
 		cardsOnTable = state.getTable().toArray(new Card[8]);//gets cards on table
 		currCrib = state.getCrib();		
-
+		
 		//draws cards and the cover of the cards that have been sent away
 		drawHand(c);
-
+		
 		drawTable(c);
-
+		
 		drawCrib(c);
-
+		
 		c.drawRect(new RectF(0,0,150,150), new Paint(Color.GREEN));
-
+		
 		c.drawRect(deckPos, new Paint(Color.RED));
 
 		//highlights cards selected
@@ -237,19 +234,10 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 				cardsOnTable[i].drawOn(c, tableCardPos[i]);//draws cards on table
 			}else if(cardsOnTable[i] == null){
 				c.drawRect(tableCardPos[i], new Paint(Color.RED));//draws red rectangle for null cards
-				int count = 0;//counter for the graphics position of each card
-				for(Card tableCard: cardsOnTable){//iterate through the arraylist of cards on table
-					if(tableCard != null){
-						tableCard.drawOn(c, tableCardPos[count]);//draws cards on table
-					}else if(tableCard == null){
-						c.drawRect(tableCardPos[count], new Paint(Color.RED));//draws red rectangle for null cards
-					}
-					count++;
-				}
 			}
 		}
 	}
-
+	
 	/**
 	 * Method that handles what to do when the user presses a certain button.
 	 * If the confirm button is pressed, the confirm() method is called.
@@ -270,31 +258,25 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * If the card has already been chosen, it deselects that card
 	 * @param card  Card that was touched
 	 */
-
-	private void selectCard(Card c) {		
-		if(state.getGameStage() == state.THROW_STAGE && isFull(tempHand)){
-			if(selectedCards[0] == c){
+	private void selectCard(Card card) {		
+		if(state.getGameStage() == CbgState.THROW_STAGE && isFull(tempHand)){
+			if(selectedCards[0] == card){
 				selectedCards[0] = null;//selects
-			}else if(selectedCards[1] == c){
+			}else if(selectedCards[1] == card){
 				selectedCards[1] = null;//selects
 			}else if(selectedCards[0] == null){
-				selectedCards[0] = c;//deselects
+				selectedCards[0] = card;//deselects
 			}else if(selectedCards[1] == null){
-				selectedCards[1] = c;//deselects
+				selectedCards[1] = card;//deselects
 			}			
-		}
-		else if(state.getGameStage() == CbgState.PEG_STAGE){
-			selectedCards[1] = c;//deselects
-		}			
-		else if(state.getGameStage() == state.PEG_STAGE){
+		}else if(state.getGameStage() == CbgState.PEG_STAGE){
 			if(selectedCards[0] == null){
-				selectedCards[0] = c;//selects
-			}else if(selectedCards[0] == c){
+				selectedCards[0] = card;//selects
+			}else if(selectedCards[0] == card){
 				selectedCards[0] = null;//deselects
 			}
 		}		
 	}
-
 
 	/**
 	 * Return the index of the specified card in the specified array
@@ -335,7 +317,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		}
 		return true;
 	}
-
+	
 	@Override
 
 	public int interval() {
@@ -349,7 +331,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	}
 
 	@Override
-
+	
 	public boolean doQuit() {
 		return false;
 	}
@@ -382,3 +364,4 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		}	
 	}
 }
+

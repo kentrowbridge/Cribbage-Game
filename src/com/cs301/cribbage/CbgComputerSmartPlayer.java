@@ -25,15 +25,12 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 	public CbgComputerSmartPlayer(String name)
 	{
 		super(name);
-
 	}
 
 	/**
 	 * This function throws two selected cards from an initial hand of 6
 	 */
-
-
-	Card[] selectedThrow(Card[] hand, int player, CbgState state){
+	private Card[] selectedThrow(Card[] hand, int player, CbgState state){
 		Card[] handToKeep = findTopHand(hand, player, state);
 		Card[] toThrow = new Card[2];
 		boolean[] foundMatch = new boolean[6];
@@ -65,8 +62,10 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 	/**
 	 * This function plays a selected card to the table
+	 * @param hand  Hand to choose card from
+	 * @param table  current cards on the table
 	 */
-	Card selectedCardToTable(Card[] hand, Card[] table){
+	private Card selectedCardToTable(Card[] hand, Card[] table){
 		int i = 0;
 		int highScore = 0;
 		Card bestCard = hand[0];
@@ -103,17 +102,14 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 		// iterate through all unique groups of 4 cards
 		// and call count4(Card hand[], Card throw[]) on each
-		// within the loop:
-		int i = 0;
-		int j = 0;
-		for (i = 0; i < NUM_CARDS_TOTAL - 1; ++i) {
-			for (j = i; j < NUM_CARDS_TOTAL; ++j) {
+		// within the loop:		
+		for (int i = 0; i < NUM_CARDS_TOTAL - 1; ++i) {
+			for (int j = i; j < NUM_CARDS_TOTAL; ++j) {
 
-				// create this test case hand
-				int k = 0; // for all six elements of hand
+				// create this test case hand			
 				int handIdx = 0; // for 0 thru 4th element of currentHand 
 				int toCribIdx = 0; // for 0 thru 1st element of toCrib
-				for (k = 0; k < NUM_CARDS_TOTAL; ++k) {
+				for (int k = 0; k < NUM_CARDS_TOTAL; ++k) {
 					if (k != i && k != j) {
 						currentHand[handIdx] = hand[k];
 						++handIdx;
@@ -145,12 +141,11 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 	 * @param state
 	 * @return
 	 */
-	// 
 	public int count4(Card[] hand, Card[] toCrib, int player, CbgState state)
 	{
 		// check that there are the proper number of cards in the hand
 		if (hand.length != NUM_CARDS_TO_KEEP) return ERROR;
-		if (toCrib.length != NUM_CARDS_TO_THROW)return ERROR;
+		if (toCrib.length != NUM_CARDS_TO_THROW) return ERROR;
 		// excellent. we were handed the proper parameter
 
 		// initialize score instance variable
@@ -158,14 +153,15 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 		// create a value ordered array and initialize to zero.
 		int[] sort = new int[SORT_ARRAY_LENGTH];
-		int i = 0; // iterator
-		for (i = 0; i < SORT_ARRAY_LENGTH; ++i) sort[i] = 0;    
+		for (int i = 0; i < SORT_ARRAY_LENGTH; ++i) sort[i] = 0;    
 
 		// this array contains the number of cards of each value type
-		for (i = 0; i < hand.length; ++i) sort[hand[i].rank.intRank()] += 1;
+		for (int i = 0; i < hand.length; ++i){
+			sort[hand[i].rank.intRank()] += 1;
+		}
 
 		// let's start by looking for pairs.
-		for (i = 1; i < SORT_ARRAY_LENGTH; ++i) {
+		for (int i = 1; i < SORT_ARRAY_LENGTH; ++i) {
 			if (sort[i] == 2) score += 2;
 			else if (sort[i] == 3) {
 				score += 6;
@@ -177,21 +173,18 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		}
 
 		// look for straights
-		for (i = 0; i < SORT_ARRAY_LENGTH - 2; ++i) {
+		for (int i = 0; i < SORT_ARRAY_LENGTH - 2; ++i) {
 			if (sort[i] > 0 && sort[i+1] > 0 && sort[i+2] > 0) {
-
 				// we have a run. is it a run of four?
 				if (i+3 < SORT_ARRAY_LENGTH && sort[i+3] > 0) { 
 					score += 4;
 					break; // no more runs to be found in this hand
 				}
-
 				// is it a double run?
 				else if (sort[i] > 1 || sort[i+1] > 1 || sort[i+2] > 1) {
 					score += 6;
 					break; // no more runs to be found in this hand
 				}
-
 				else {
 					score += 3;
 					break; // no more runs to be found in this hand
@@ -201,28 +194,27 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 
 		// look for 15s
 		// first look for 15s in groups of two cards
-		int j = 0; // new iterator
-		for (i = 0; i < hand.length - 1; ++i)
-			for (j = i + 1; j < hand.length; ++j)
+		for (int i = 0; i < hand.length - 1; ++i)
+			for (int j = i + 1; j < hand.length; ++j)
 				if (hand[i].rank.intCountValue() + hand[j].rank.intCountValue() == FIFTEEN) score += 2;
 
 		// now look for 15s in groups of three cards
 		int tempSum = 0;
-		for (i = 0; i < hand.length; ++i) {
+		for (int i = 0; i < hand.length; ++i) {
 			tempSum = 0;
-			for (j = 0; j < hand.length; ++j) if (j != i) tempSum += hand[j].rank.intCountValue();
+			for (int j = 0; j < hand.length; ++j) if (j != i) tempSum += hand[j].rank.intCountValue();
 			if (tempSum == FIFTEEN) score += 2;
 		}
 
 		// now look for a 15 made of all four cards
 		tempSum = 0;
-		for (i = 0; i < hand.length; ++i) tempSum += hand[i].rank.intCountValue();
+		for (int i = 0; i < hand.length; ++i) tempSum += hand[i].rank.intCountValue();
 		if (tempSum == FIFTEEN) score += 2;
 
 		// look for a flush
 		int flushSuit = hand[0].suit.intSuit();
 		boolean isFlush = true;
-		for (i = 1; i < hand.length; ++i) {
+		for (int i = 1; i < hand.length; ++i) {
 			if (flushSuit != hand[i].suit.intSuit()) {
 				isFlush = false;
 				break;
@@ -244,7 +236,7 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		}
 
 		return score;
-	} // end count4(Card hand[])
+	} // end count4
 
 
 	@Override
@@ -257,9 +249,11 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		}
 	}
 
+	/**
+	 * Method that determines what cards or card to play
+	 */
 	private void takeTurn(){
-		action = null;
-		
+		action = null;		
 		// fill the action depending on the stage.
 		if(state.getGameStage() == CbgState.THROW_STAGE){
 			action = new CardsToThrow(this,selectedThrow(state.getHand(), CbgState.PLAYER_2, state));
@@ -267,9 +261,6 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		else if (state.getGameStage() == CbgState.PEG_STAGE){
 			action = new CardsToTable(this, selectedCardToTable(state.getHand(), state.getTable().toArray(new Card[8])));
 		}
-		
-		// don't forget to send the action!
-		game.sendAction(action);
-
+		game.sendAction(action);//sends action
 	}
 }
