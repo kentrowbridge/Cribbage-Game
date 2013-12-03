@@ -24,21 +24,20 @@ public class CbgCounter {
 	 */
 	// counts the score when handed a hand of 5 cards (including the bonus card)
 
-	static boolean canMove(CbgState state, Card card){//only works in player classes
-		boolean canMove = false;
-		if(state.getGameStage() == CbgState.PEG_STAGE){
-			
-			for (int i = 0; i < state.getHand().length; ++i) {//iterate through player hand
-				if (state.getHand()[i] != null &&//if current card is not null 
-						(card.getRank().intCountValue() + state.getTally()) <= 31) {
-					canMove = true;
-					break;
-				}
-			}
+	static boolean canMove(Card card,CbgState state){//checks if a player can play
+		if(card != null && card.getRank().intCountValue() + state.getTally() <= 31){
+			return true;
 		}
-		return canMove;
-
+		return false;
 	}
+	
+	static boolean isValidTableCard(Card card, CbgState state) {
+		if(card != null && card.getRank().intCountValue() + state.getTally() > 31){
+			return false;
+		}
+		else return true;
+	}
+	
 	static int  count5(Card hand[], Card bonusCard)
 	{
 		// check that there are the proper number of cards in the hand
@@ -221,8 +220,7 @@ public class CbgCounter {
 		else if (len >= 2 
 				&& table[len - 1].rank.intRank() == table[len - 2].rank.intRank()) score += 2;
 
-		// check for 15
-		if (getTally(table) == FIFTEEN) score += 2;
+		
 
 		// check for flush
 		if (len >= 4 

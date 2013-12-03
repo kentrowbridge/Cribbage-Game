@@ -76,13 +76,17 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 					action = new CardsToThrow(this, selectedCards);//sets action
 					game.sendAction(action);//sends game action
 				}
-			}else if(state.getGameStage() == CbgState.PEG_STAGE){//checks if game is in peg stage
-				if(CbgCounter.canMove(state, selectedCards[0])){
+			}
+			else if(state.getGameStage() == CbgState.PEG_STAGE){//checks if game is in peg stage
+				if(CbgCounter.canMove(selectedCards[0], state)){
 					action = new CardsToTable(this, selectedCards[0]);//sets action
-					tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
+					int cardPos = indexOfCard(tempHand, selectedCards[0]);
 
 
 					game.sendAction(action);//sends game action
+					if (cardPos >=0 && cardPos < tempHand.length){
+						tempHand[cardPos] = null;//gets index of card played and removes the card
+					}
 				}
 			}
 			//resets selected cards
@@ -172,7 +176,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		//init rectangles for cards to be drawn on
 		deckPos = new RectF(0, height*2/3, cardWidth, height);
 
-		for(int i = 0; i<handCardPos.length;i++){
+		for(int i = 0; i<handCardPos.length;i++){//TODO these inits should be outside tick so they don't happen every time
 			handCardPos[i] = new RectF(((i+1)*cardWidth)+10, height*2/3, ((i+2)*cardWidth)+10, height);//inits pos of hand
 		}
 
@@ -191,7 +195,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		currCrib = state.getCrib();		
 
 		if(state.getGameStage() == CbgState.PEG_STAGE){
-			Card bonusCard = state.getDeck().peekAtTopCard();//saves top card of deck
+			Card bonusCard = state.getBonusCard();//saves top card of deck
 			bonusCard.drawOn(c, deckPos);//draws top card
 		}
 		else {
@@ -206,9 +210,12 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		drawCrib(c);
 
 		//highlights cards selected
+
 		for(Card selected: selectedCards){
-			if(selected != null){
-				highLight(c, handCardPos[indexOfCard(tempHand, selected)], new Paint(Color.BLACK));
+			synchronized("sync"){
+				if(selected != null){//think issue here with syncronization, card nulled after null check TODO
+					highLight(c, handCardPos[indexOfCard(tempHand, selected)], new Paint(Color.BLACK));
+				}
 			}
 		}
 	}
@@ -242,7 +249,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @param c  canvas to draw on
 	 */
 	private void drawTable(Canvas c) {
-		for(int i = 0; i<cardsOnTable.length;i++){//iterate through the arraylist of cards on table
+		for(int i = 0; i < cardsOnTable.length; i++){//iterate through the array of cards on table
 			if(cardsOnTable[i] != null){
 				cardsOnTable[i].drawOn(c, tableCardPos[i]);//draws cards on table
 			}
@@ -309,7 +316,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 				return i;//index of card touched
 			}
 		}
-		return -1;//error value
+		return 0;//error value
 	}
 
 	/** 

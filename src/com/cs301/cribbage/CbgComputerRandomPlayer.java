@@ -34,19 +34,67 @@ class CbgComputerRandomPlayer extends CbgComputerPlayer {
 		Card[] toThrow = new Card[2];
 		toThrow[0] = hand[rand1];
 		toThrow[1] = hand[rand2];
+		hand[rand1] = null;
+		hand[rand2] = null;
 		return toThrow;        
+	}
+
+
+
+	private int indexOfCard(Card[] a, Card c){
+		for(int i =0; i<a.length;i++){//iterate through array searching for card
+			if(a[i]==c){
+				return i;//index of card touched
+			}
+		}
+		return -1;//error value
 	}
 
 	/**
 	 * Determines randomly which card in its hand to play to the table
 	 */
-	Card cardsToTable(Card[] hand){
-		int rand1 = (int)(Math.random()*hand.length); // oracle to remind myself how to make a random number.
+
+
+	private Card cardsToTable(Card[] hand){
+
+		////Likely unneeded
+		//		// check that we don't have all of the hand be null.
+		//		boolean isAllNull = true;
+		//		for (int i = 0; i < hand.length; ++i){
+		//			if (hand[i] != null) {
+		//				isAllNull = false;
+		//				break;
+		//			}
+		//		}
+		//		
+		//		//if the computer has no more cards left in hand
+		//		if (isAllNull){
+		//			return null;
+		//		}
+
+		//check if the computers hand has a card that can be played
+		//		boolean hasValidCard = false;
+		//		for (int i = 0; i < hand.length; ++i){
+		//			Card card = hand[i];
+		//			if(card != null && card.getRank().intCountValue() + state.getTally() <= 31){
+		//				hasValidCard = true;
+		//				break;
+		//			}
+		//		}
+		//		if (!hasValidCard) return null;
+
+		int rand1 = (int)Math.random()*hand.length;
+		boolean canPlay = false;
+
+		// oracle to remind myself how to make a random number.
 		// return the randomly chosen element if not null. 
 		// if null, loop through the array until a non-null element is found and then retrun.
-		while (hand[rand1] == null) {
+		while (hand[rand1] == null && !canPlay) {
+
 			rand1 = (rand1 + 1)%6;
+			canPlay = CbgCounter.canMove(hand[rand1], state);
 		}
+
 		return hand[rand1];
 	}
 
@@ -66,15 +114,27 @@ class CbgComputerRandomPlayer extends CbgComputerPlayer {
 	 */
 	private void takeTurn(){
 		action = null;
+		Card card = null;
 		if(state.getGameStage() == CbgState.THROW_STAGE){//if throw stage
 			action = new CardsToThrow(this, throwCards(state.getHand()));//pick two cards to throw and save them into 
-																		//a CardsToThrow action
+			//a CardsToThrow action
 		}
 		else if (state.getGameStage() == CbgState.PEG_STAGE){
-			action = new CardsToTable(this, cardsToTable(state.getHand()));//pick one card and save it to 
-																		//a CardsToTable action
+			card = cardsToTable(state.getHand());
+			action = new CardsToTable(this, card);//pick one card and save it to 
+			//a CardsToTable action
+
+
 			sleep((int) (Math.random()*1000));//sleep up to one second
 		}		
-		game.sendAction(action);//senda action
+		game.sendAction(action);//sends action
+		if(card != null){
+			int cardPos = indexOfCard(state.getHand(), card);
+			if (cardPos >=0 && cardPos < state.getHand().length){
+				Card[] hand = state.getHand();
+				hand[cardPos] = null;
+				state.setHand(hand);//gets index of card played and removes the card
+			}
+		}
 	}
 }

@@ -3,10 +3,13 @@ import edu.up.cs301.card.*;
 import edu.up.cs301.game.GamePlayer;
 import edu.up.cs301.game.actionMsg.GameAction;
 
-/* 
-   
+/**
+ * @author Will Christiansen
+ * @author Devon Griggs
+ * @author Nick Sohm
+ * @author Kenny Trowbridge
+ * @version 12/2/2013
  */
-
 
 class CardsToThrow extends GameAction {
 
@@ -21,12 +24,13 @@ class CardsToThrow extends GameAction {
     	super(player);
     	this.player = player;
     	cardsToThrow = cards;
-    }
+    } // Constructor for the CardsToThrow gameAction
     
     /**
-     * gets cards from action
+     * Gets the cards from an action
      * @return  cards thrown
      */
+    
     public Card[] cards(){
     	return cardsToThrow;
     }
@@ -34,9 +38,8 @@ class CardsToThrow extends GameAction {
     /** 
      * @return player
      */
+    
     public GamePlayer player(){
     	return player;
     }
-
-
 }
