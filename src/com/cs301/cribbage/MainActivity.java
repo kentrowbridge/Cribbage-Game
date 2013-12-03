@@ -13,7 +13,8 @@ import edu.up.cs301.game.config.GamePlayerType;
  * 
  * @author Andrew M. Nuxoll
  * @author Steven R. Vegdahl
- * @version July 2013
+ * @author Kenny Trowbridge
+ * @version 12/2/2013
  */
 public class MainActivity extends GameMainActivity {
 	
@@ -41,18 +42,18 @@ public class MainActivity extends GameMainActivity {
 				return new CbgHumanPlayer(name);
 			}});
 		
-		// a computer player type (player type 1)
-		playerTypes.add(new GamePlayerType("Computer Smart Player") {
-			public GamePlayer createPlayer(String name) {
-				return new CbgComputerRandomPlayer(name);
-			}});
-		
 		// a computer player type (player type 2)
 		playerTypes.add(new GamePlayerType("Computer Random Player") {
 			public GamePlayer createPlayer(String name) {
 				return new CbgComputerRandomPlayer(name);
 			}});
 
+		// a computer player type (player type 1)
+		playerTypes.add(new GamePlayerType("Computer Smart Player") {
+			public GamePlayer createPlayer(String name) {
+				return new CbgComputerSmartPlayer(name);
+			}});
+		
 		// Create a game configuration class for Cbg:
 		// - player types as given above
 		// - from 1 to 2 players

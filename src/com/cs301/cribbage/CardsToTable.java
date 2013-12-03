@@ -20,10 +20,18 @@ class CardsToTable extends GameAction {
             cardsToTable = card;    
     }
     
-    //getter for card to table
+    /**
+     * gets the cards from the action
+     * @return cards stored
+     */
     public Card cards(){
     	return cardsToTable;
     }
+    
+    /**
+     * gets the player who sent the action
+     * @return  player
+     */
     public GamePlayer player(){
     	return player;
     }

@@ -22,8 +22,7 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 	public static final int MAX_CARDS_ON_TABLE = 8;
 	private CbgState state;
 	private GameAction action;
-	public CbgComputerSmartPlayer(String name)
-	{
+	public CbgComputerSmartPlayer(String name){
 		super(name);
 	}
 
@@ -61,24 +60,24 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 	}
 
 	/**
+	 *TODO check this with Devon
 	 * This function plays a selected card to the table
 	 * @param hand  Hand to choose card from
 	 * @param table  current cards on the table
 	 */
 	private Card selectedCardToTable(Card[] hand, Card[] table){
-		int i = 0;
 		int highScore = 0;
 		Card bestCard = hand[0];
-		for (i = 0; i < NUM_CARDS_TOTAL; ++i){
+		for (int i = 0; i < NUM_CARDS_TOTAL; ++i){//total number of cards
 			if (hand[i] != null) {
-				for (i = 0; i < MAX_CARDS_ON_TABLE; ++i){
-					if (table[i] == null) {
-						table[i] = hand[i];
+				for (int j = 0; j < MAX_CARDS_ON_TABLE; ++j){
+					if (table[j] == null) {
+						table[j] = hand[j];
 						if(highScore < CbgCounter.countTable(table)) {
 							highScore = CbgCounter.countTable(table);
-							bestCard = table[i];
+							bestCard = table[j];
 						}
-						table[i] = null;
+						table[j] = null;
 						break;
 					}
 				}
@@ -87,9 +86,14 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		return bestCard;
 	}
 
-
-	public Card[] findTopHand(Card[] hand, int player, CbgState state) 
-	{
+	/**
+	 * This method finds the hand that will score the most points
+	 * @param hand  hand that has been dealt
+	 * @param player  reference to which player is using this method
+	 * @param state  current state
+	 * @return  the top scoring hand
+	 */
+	private Card[] findTopHand(Card[] hand, int player, CbgState state){
 		// check that there are the proper number of cards in the hand
 		if (hand.length != NUM_CARDS_TOTAL) return null;
 		// excellent. we were handed the proper parameter
@@ -238,7 +242,10 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		return score;
 	} // end count4
 
-
+	/**
+	 * receives info from the game and if it is the computers turn, calls the method to select 
+	 * cards to throw or to place on table
+	 */
 	@Override
 	protected void receiveInfo(GameInfo info) {
 		if(info instanceof CbgState){
@@ -260,6 +267,7 @@ class CbgComputerSmartPlayer extends CbgComputerPlayer {
 		}
 		else if (state.getGameStage() == CbgState.PEG_STAGE){
 			action = new CardsToTable(this, selectedCardToTable(state.getHand(), state.getTable().toArray(new Card[8])));
+			sleep((int) (Math.random()*1000));//sleep up to one second
 		}
 		game.sendAction(action);//sends action
 	}
