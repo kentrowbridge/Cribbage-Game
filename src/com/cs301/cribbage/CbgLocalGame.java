@@ -309,4 +309,39 @@ class CbgLocalGame extends LocalGame{
 			}
 			state.setGameStage(CbgState.THROW_STAGE); 
 		}
+<<<<<<< HEAD
 	}
+=======
+		return isEmpty;
+	}
+	
+	private void count(){	
+		//after the score has been tallied, checks if the game is over
+		if(state.getGameOver()) return;
+		if (state.getCribOwner() == CbgState.PLAYER_1) {
+			state.setScore(state.getScore(CbgState.PLAYER_2) + CbgCounter.count5(state.getHand(CbgState.PLAYER_2), 
+					state.getBonusCard()), CbgState.PLAYER_2);// counting player 2 hand
+			
+			checkIfGameOver();
+			
+			state.setScore(state.getScore(CbgState.PLAYER_1) + CbgCounter.count5(state.getHand(CbgState.PLAYER_1), 
+					state.getBonusCard()), CbgState.PLAYER_1);// counting player 1 hand
+			state.setScore(state.getScore(CbgState.PLAYER_1) + CbgCounter.count5(state.getCrib(), 
+					state.getBonusCard()), CbgState.PLAYER_1);// counting crib hand for player 1 
+			checkIfGameOver();
+		} else {
+			state.setScore(state.getScore(CbgState.PLAYER_1) + CbgCounter.count5(state.getHand(CbgState.PLAYER_1), 
+					state.getBonusCard()), CbgState.PLAYER_1);
+			
+			checkIfGameOver();
+			
+			state.setScore(state.getScore(CbgState.PLAYER_2) + CbgCounter.count5(state.getHand(CbgState.PLAYER_2), 
+					state.getBonusCard()), CbgState.PLAYER_2);
+			state.setScore(state.getScore(CbgState.PLAYER_2) + CbgCounter.count5(state.getCrib(), 
+					state.getBonusCard()), CbgState.PLAYER_2);
+			checkIfGameOver();
+		}
+		state.setGameStage(CbgState.THROW_STAGE); 
+	}
+}
+>>>>>>> c67f94ecb6b20d3eeeec137be03689f7c3132af7
