@@ -184,10 +184,11 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			tableCardPos[j] = new RectF(j*cardWidth, 0, (j+1)*cardWidth, height/3);//inits pos of table
 		}
 
-		throwPos[0] = new RectF(9*cardWidth                , height*2/3, 10*cardWidth                , height);
-		throwPos[1] = new RectF(9*cardWidth + cardWidth/3  , height*2/3, 10*cardWidth + cardWidth/3  , height);
-		throwPos[2] = new RectF(9*cardWidth + cardWidth*2/3, height*2/3, 10*cardWidth + cardWidth*2/3, height);
-		throwPos[3] = new RectF(10*cardWidth               , height*2/3, 11*cardWidth                , height);
+		throwPos[0] = new RectF(7*cardWidth + cardWidth/2, height*2/3 - 50, 8*cardWidth + cardWidth/2, height - 50);
+		throwPos[1] = new RectF(7*cardWidth + cardWidth/2, height*2/3     , 8*cardWidth + cardWidth/2, height     );
+		
+		throwPos[2] = new RectF(8*cardWidth		 , height*2/3 - 50, 9*cardWidth              , height - 50);
+		throwPos[3] = new RectF(8*cardWidth              , height*2/3     , 9*cardWidth              , height);
 
 		//inits local variables from state variables
 		tempHand = state.getHand();
