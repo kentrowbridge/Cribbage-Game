@@ -38,6 +38,7 @@ public class CbgCounter {
 		else return true;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Counts the points that would results from the given hand with the bonus card
 	 * @param hand  hand to count
@@ -45,6 +46,9 @@ public class CbgCounter {
 	 * @return  score from count
 	 */
 	static int count5(Card hand[], Card bonusCard)
+=======
+	static int  count5(Card hand[], Card bonusCard)
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 	{
 		// check that there are the proper number of cards in the hand
 		if (hand.length != NUM_CARDS_TO_KEEP) return ERROR;
@@ -55,6 +59,7 @@ public class CbgCounter {
 
 		// create a value ordered array and initialize to zero.
 		int[] sort = new int[SORT_ARRAY_LENGTH];
+<<<<<<< HEAD
 		for (int i = 0; i < SORT_ARRAY_LENGTH; ++i) sort[i] = 0;    
 
 		// this array contains the number of cards of each value type
@@ -63,6 +68,17 @@ public class CbgCounter {
 
 		// let's start by looking for pairs.
 		for (int i = 1; i < SORT_ARRAY_LENGTH; ++i) {
+=======
+		int i = 0; // iterator
+		for (i = 0; i < SORT_ARRAY_LENGTH; ++i) sort[i] = 0;    
+
+		// this array contains the number of cards of each value type
+		for (i = 0; i < hand.length; ++i) sort[hand[i].rank.intRank()] += 1;
+		sort[bonusCard.rank.intRank()] += 1; 
+
+		// let's start by looking for pairs.
+		for (i = 1; i < SORT_ARRAY_LENGTH; ++i) {
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			if (sort[i] == 2) score += 2;
 			else if (sort[i] == 3) score += 6;
 			else if (sort[i] == 4) { 
@@ -73,7 +89,11 @@ public class CbgCounter {
 
 
 		// look for straights
+<<<<<<< HEAD
 		for (int i = 0; i < SORT_ARRAY_LENGTH - 2; ++i) {
+=======
+		for (i = 0; i < SORT_ARRAY_LENGTH - 2; ++i) {
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			if (sort[i] > 0 && sort[i+1] > 0 && sort[i+2] > 0) {
 
 				// we have a run. is it a run of four?
@@ -129,43 +149,73 @@ public class CbgCounter {
 		// look for 15s
 		// create a new hand of five cards which includes the bonus card to aid in searching for 15s
 		Card[] bcHand = new Card[NUM_CARDS_TO_KEEP + 1];
+<<<<<<< HEAD
 		for (int i = 0; i < bcHand.length - 1; ++i) {
+=======
+		for (i = 0; i < bcHand.length - 1; ++i) {
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			bcHand[i] = hand[i];
 		}
 		bcHand[bcHand.length - 1] = bonusCard;
 
 		// first look for 15s in pairs of cards and if triples of cards    
 		int tempSum = 0;
+<<<<<<< HEAD
 		for (int i = 0; i < bcHand.length - 1; ++i) {
+=======
+		for (i = 0; i < bcHand.length - 1; ++i) {
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			int j = 0; // new iterator
 			for (j = i + 1; j < bcHand.length; ++j) {
 				// test if the two cards make 15
 				if (bcHand[i].rank.intCountValue() + bcHand[j].rank.intCountValue() == FIFTEEN) score += 2;
 
 				// test if the three cards make 15
+<<<<<<< HEAD
 				tempSum = 0;
 				for (int k = 0; k < bcHand.length; ++k) if (k != i && k != j) tempSum += bcHand[k].rank.intCountValue();
+=======
+				int k = 0;
+				tempSum = 0;
+				for (k = 0; k < bcHand.length; ++k) if (k != i && k != j) tempSum += bcHand[k].rank.intCountValue();
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 				if (tempSum == FIFTEEN) score += 2;
 			}
 		}
 
 		// now look for 15s in groups of four cards
+<<<<<<< HEAD
 		for (int i = 0; i < bcHand.length; ++i) {
 			tempSum = 0;
 			for (int k = 0; k < bcHand.length; ++k) if (k != i) tempSum += bcHand[k].rank.intCountValue();
+=======
+		for (i = 0; i < bcHand.length; ++i) {
+			int k = 0;
+			tempSum = 0;
+			for (k = 0; k < bcHand.length; ++k) if (k != i) tempSum += bcHand[k].rank.intCountValue();
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			if (tempSum == FIFTEEN) score += 2;
 		}
 
 		// now see if all five cards make 15
 		tempSum = 0;
+<<<<<<< HEAD
 		for (int i = 0; i < bcHand.length; ++i) tempSum += bcHand[i].rank.intCountValue();    
+=======
+		for (i = 0; i < bcHand.length; ++i) tempSum += bcHand[i].rank.intCountValue();    
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 		if (tempSum == FIFTEEN) score += 2;
 
 		// look for flushes
 		// create an array much like sort but for suits
 		int[] suitsArray = new int[NUM_SUITS];
+<<<<<<< HEAD
 		for (int i = 0; i < bcHand.length; ++i) suitsArray[bcHand[i].suit.intSuit()] += 1;
 		for (int i = 0; i < NUM_SUITS; ++i) {
+=======
+		for (i = 0; i < bcHand.length; ++i) suitsArray[bcHand[i].suit.intSuit()] += 1;
+		for (i = 0; i < NUM_SUITS; ++i) {
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 			if (suitsArray[i] == 4) {
 				score += 4;
 				break;
@@ -177,9 +227,13 @@ public class CbgCounter {
 		}
 
 		// look for nobs
+<<<<<<< HEAD
 		for (int i = 0; i < hand.length; ++i){
 			if (hand[i].rank.intRank() == 11 && hand[i].suit.intSuit() == bonusCard.suit.intSuit()) score += 1;
 		}
+=======
+		for (i = 0; i < hand.length; ++i) if (hand[i].rank.intRank() == 11 && hand[i].suit.intSuit() == bonusCard.suit.intSuit()) score += 1;
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 
 		return score;
 	}

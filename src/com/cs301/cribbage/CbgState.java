@@ -390,6 +390,7 @@ class CbgState extends GameState {
 		return cribOwner;
 	}
 	
+<<<<<<< HEAD
 	public void switchCribOwner(){
 		if(cribOwner == CbgState.PLAYER_1){
 			cribOwner = CbgState.PLAYER_2;
@@ -397,6 +398,8 @@ class CbgState extends GameState {
 			cribOwner = CbgState.PLAYER_1;
 		}
 	}
+=======
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 	/**
 	 * Getter method for the throwCount
 	 * @return int throwCount  The number of cards being thrown

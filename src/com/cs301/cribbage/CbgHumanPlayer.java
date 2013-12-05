@@ -187,7 +187,11 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		throwPos[0] = new RectF(7*cardWidth + cardWidth/2, height*2/3 - 50, 8*cardWidth + cardWidth/2, height - 50);
 		throwPos[1] = new RectF(7*cardWidth + cardWidth/2, height*2/3     , 8*cardWidth + cardWidth/2, height     );
 		
+<<<<<<< HEAD
 		throwPos[2] = new RectF(8*cardWidth				 , height*2/3 - 50, 9*cardWidth              , height - 50);
+=======
+		throwPos[2] = new RectF(8*cardWidth		 , height*2/3 - 50, 9*cardWidth              , height - 50);
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 		throwPos[3] = new RectF(8*cardWidth              , height*2/3     , 9*cardWidth              , height);
 
 		//inits local variables from state variables
@@ -209,17 +213,28 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		drawTable(c);
 
 		drawCrib(c);
+<<<<<<< HEAD
 		 
 		drawCardBack(c, new RectF(0f, 0f, 25f, 30f));
+=======
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 
 		//highlights cards selected
 
 		for(Card selected: selectedCards){
+<<<<<<< HEAD
 			//synchronized("sync"){
 				if(selected != null){//think issue here with syncronization, card nulled after null check TODO
 					highLight(c, handCardPos[indexOfCard(tempHand, selected)], new Paint(Color.BLACK));
 				}
 			//}
+=======
+			synchronized("sync"){
+				if(selected != null){//think issue here with syncronization, card nulled after null check TODO
+					highLight(c, handCardPos[indexOfCard(tempHand, selected)], new Paint(Color.BLACK));
+				}
+			}
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
 		}
 	}
 
@@ -391,4 +406,8 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 			}
 		}	
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 9a784e1c681e701813182b1fc71b380ae4d1f810
