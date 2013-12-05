@@ -41,12 +41,16 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private RectF[] tableCardPos = new RectF[10];//positions where table cards are drawn
 	private RectF[] throwPos = new RectF[4];//position of cards in crib
 	private RectF deckPos;
-	
+
 	private Card[] tempHand;//temporary hand for changing	
 	private Card[] selectedCards = new Card[2];
 	private Card[] cardsOnTable;//arraylist of cards currently on the table
 	private Card[] currCrib;
 	private GameAction action;//action that will be sent to the game
+
+	private Paint cardBackOutline = new Paint(Color.BLACK);
+	private Paint cardBackFill = new Paint(Color.BLUE);
+
 
 	public CbgHumanPlayer(String name) {
 		super(name);
@@ -58,27 +62,38 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * 	and sends that action to the game.
 	 */
 	public final void confirm() { 
-		action = null;//resets action		
-		if(state.getGameStage() == CbgState.THROW_STAGE){//checks if game is in throw stage
-			if(isFull(selectedCards)){
-				for(int i = 0; i < selectedCards.length;i++){
-					int cardPos = indexOfCard(tempHand, selectedCards[i]);
-					if (cardPos >=0 && cardPos < tempHand.length){
-						//removes cards
-						tempHand[cardPos] = null;
-					}
-				}			
-			action = new CardsToThrow(this, selectedCards);//sets action
+		if(!isEmpty(selectedCards)){//do only if cards have been selected
+			action = null;//resets action		
+			if(state.getGameStage() == CbgState.THROW_STAGE){//checks if game is in throw stage
+				if(isFull(selectedCards)){
+					for(int i = 0; i < selectedCards.length;i++){
+						int cardPos = indexOfCard(tempHand, selectedCards[i]);
+						if (cardPos >=0 && cardPos < tempHand.length){
+							//removes cards
+							tempHand[cardPos] = null;
+						}
+					}			
+					action = new CardsToThrow(this, selectedCards);//sets action
+					game.sendAction(action);//sends game action
+				}
 			}
-		}else if(state.getGameStage() == CbgState.PEG_STAGE){//checks if game is in peg stage
-			action = new CardsToTable(this, selectedCards[0]);//sets action
-			tempHand[indexOfCard(tempHand, selectedCards[0])] = null;//gets index of card played and removes the card
+			else if(state.getGameStage() == CbgState.PEG_STAGE){//checks if game is in peg stage
+				if(CbgCounter.canMove(selectedCards[0], state)){
+					action = new CardsToTable(this, selectedCards[0]);//sets action
+					int cardPos = indexOfCard(tempHand, selectedCards[0]);
+
+
+					game.sendAction(action);//sends game action
+					if (cardPos >=0 && cardPos < tempHand.length){
+						tempHand[cardPos] = null;//gets index of card played and removes the card
+					}
+				}
+			}
+			//resets selected cards
+			selectedCards[0] = null;
+			selectedCards[1] = null;
+
 		}
-		game.sendAction(action);//sends game action
-		
-		//resets selected cards
-		selectedCards[0] = null;
-		selectedCards[1] = null;
 	}
 
 	/**
@@ -87,9 +102,12 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	private void updateDisplay(){
 		//updates GUI to reflect score
 		p1Progress.setProgress(state.getScore(CbgState.PLAYER_1));
-		p2Progress.setProgress(state.getScore(CbgState.PLAYER_2));    	
+		p2Progress.setProgress(state.getScore(CbgState.PLAYER_2));    
+
 		p1Score.setText(""+state.getScore(CbgState.PLAYER_1));
 		p2Score.setText(""+state.getScore(CbgState.PLAYER_2));
+
+		tallyCount.setText("" + state.getTally());
 
 		tutorial.setText(state.tutorialTexts[state.getGameStage()]);
 	}
@@ -143,7 +161,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	}
 
 	public int backgroundColor() {		
-		return 0x228b22;
+		return 0xff228b22;
 	}
 
 	/**
@@ -152,47 +170,56 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 */
 	public void tick(Canvas c) {
 		if (state == null) return;//if state is null, quit method
-		
-		Card bonusCard = state.getDeck().peekAtTopCard();//saves top card of deck
-		bonusCard.drawOn(c, new RectF(100, 100, 200, 0));//draws top card
 
 		float cardWidth = c.getWidth()/9;
 		float height = c.getHeight();
 		//init rectangles for cards to be drawn on
 		deckPos = new RectF(0, height*2/3, cardWidth, height);
-		
-		for(int i = 0; i<handCardPos.length;i++){
-			handCardPos[i] = new RectF((i+1)*cardWidth, height*2/3, (i+2)*cardWidth, height);//inits pos of hand
+
+		for(int i = 0; i<handCardPos.length;i++){//TODO these inits should be outside tick so they don't happen every time
+			handCardPos[i] = new RectF(((i+1)*cardWidth)+10, height*2/3, ((i+2)*cardWidth)+10, height);//inits pos of hand
 		}
-		
+
 		for(int j = 0;j<tableCardPos.length;j++){
 			tableCardPos[j] = new RectF(j*cardWidth, 0, (j+1)*cardWidth, height/3);//inits pos of table
 		}
+
+		throwPos[0] = new RectF(7*cardWidth + cardWidth/2, height*2/3 - 50, 8*cardWidth + cardWidth/2, height - 50);
+		throwPos[1] = new RectF(7*cardWidth + cardWidth/2, height*2/3     , 8*cardWidth + cardWidth/2, height     );
 		
-		throwPos[0] = new RectF(9*cardWidth                , height*2/3, 10*cardWidth                , height);
-		throwPos[1] = new RectF(9*cardWidth + cardWidth/3  , height*2/3, 10*cardWidth + cardWidth/3  , height);
-		throwPos[2] = new RectF(9*cardWidth + cardWidth*2/3, height*2/3, 10*cardWidth + cardWidth*2/3, height);
-		throwPos[3] = new RectF(10*cardWidth               , height*2/3, 11*cardWidth                , height);
+		throwPos[2] = new RectF(8*cardWidth				 , height*2/3 - 50, 9*cardWidth              , height - 50);
+		throwPos[3] = new RectF(8*cardWidth              , height*2/3     , 9*cardWidth              , height);
 
 		//inits local variables from state variables
 		tempHand = state.getHand();
 		cardsOnTable = state.getTable().toArray(new Card[8]);//gets cards on table
 		currCrib = state.getCrib();		
-		
+
+		if(state.getGameStage() == CbgState.PEG_STAGE){
+			Card bonusCard = state.getBonusCard();//saves top card of deck
+			bonusCard.drawOn(c, deckPos);//draws top card
+		}
+		else {
+			drawCardBack(c, deckPos);
+		}
+
 		//draws cards and the cover of the cards that have been sent away
 		drawHand(c);
-		
+
 		drawTable(c);
-		
+
 		drawCrib(c);
-		
-		c.drawRect(new RectF(0,0,150,150), new Paint(Color.GREEN));
-		
-		c.drawRect(deckPos, new Paint(Color.RED));
+		 
+		drawCardBack(c, new RectF(0f, 0f, 25f, 30f));
 
 		//highlights cards selected
+
 		for(Card selected: selectedCards){
-			if(selected != null){highLight(c, handCardPos[indexOfCard(tempHand, selected)]);}
+			//synchronized("sync"){
+				if(selected != null){//think issue here with syncronization, card nulled after null check TODO
+					highLight(c, handCardPos[indexOfCard(tempHand, selected)], new Paint(Color.BLACK));
+				}
+			//}
 		}
 	}
 
@@ -204,8 +231,6 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		for(int i = 0; i < currCrib.length; i++){
 			if(currCrib[i] != null){
 				currCrib[i].drawOn(c, throwPos[i]);
-			}else if(currCrib[i] == null){
-				c.drawRect(throwPos[i], new Paint(Color.RED));
 			}
 		}
 	}
@@ -218,8 +243,6 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 		for(int i = 0; i < tempHand.length;i++){
 			if(tempHand[i] != null){//if card is null, dont draw it
 				tempHand[i].drawOn(c, handCardPos[i]);//draws the cards in each position
-			}else if(tempHand[i] == null){
-				c.drawRect(handCardPos[i], new Paint(Color.BLACK));//covers up old cards
 			}
 		}
 	}
@@ -229,15 +252,21 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @param c  canvas to draw on
 	 */
 	private void drawTable(Canvas c) {
-		for(int i = 0; i<cardsOnTable.length;i++){//iterate through the arraylist of cards on table
+		for(int i = 0; i < cardsOnTable.length; i++){//iterate through the array of cards on table
 			if(cardsOnTable[i] != null){
 				cardsOnTable[i].drawOn(c, tableCardPos[i]);//draws cards on table
-			}else if(cardsOnTable[i] == null){
-				c.drawRect(tableCardPos[i], new Paint(Color.RED));//draws red rectangle for null cards
 			}
 		}
 	}
-	
+
+	private void drawCardBack(Canvas c, RectF where){
+		RectF innerFill = new RectF(where.left+10, where.top+10, where.right-10, where.bottom-10);	
+
+		c.drawRect(where, cardBackOutline);
+		c.drawRect(innerFill, cardBackFill);
+
+	}
+
 	/**
 	 * Method that handles what to do when the user presses a certain button.
 	 * If the confirm button is pressed, the confirm() method is called.
@@ -259,15 +288,15 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @param card  Card that was touched
 	 */
 	private void selectCard(Card card) {		
-		if(state.getGameStage() == CbgState.THROW_STAGE && isFull(tempHand)){
+		if(state.getGameStage() == CbgState.THROW_STAGE && isFull(tempHand)){//if the temp hand is full and its the throw stage
 			if(selectedCards[0] == card){
-				selectedCards[0] = null;//selects
+				selectedCards[0] = null;//deselects
 			}else if(selectedCards[1] == card){
-				selectedCards[1] = null;//selects
+				selectedCards[1] = null;//deselects
 			}else if(selectedCards[0] == null){
-				selectedCards[0] = card;//deselects
+				selectedCards[0] = card;//selects
 			}else if(selectedCards[1] == null){
-				selectedCards[1] = card;//deselects
+				selectedCards[1] = card;//selects
 			}			
 		}else if(state.getGameStage() == CbgState.PEG_STAGE){
 			if(selectedCards[0] == null){
@@ -285,12 +314,12 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @return  Index of the card, -1 if card is not found
 	 */
 	private int indexOfCard(Card[] a, Card c){
-		for(int i =0; i<a.length;i++){
+		for(int i =0; i<a.length;i++){//iterate through array searching for card
 			if(a[i]==c){
-				return i;
+				return i;//index of card touched
 			}
 		}
-		return -1;
+		return 0;//error value
 	}
 
 	/** 
@@ -298,11 +327,10 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @param c  Canvas to draw on
 	 * @param where  Where to highlight
 	 */
-	private void highLight(Canvas c, RectF where){
+	private void highLight(Canvas c, RectF where, Paint p){
 		if(where != null){
-			Paint highlight = new Paint(Color.BLACK);
-			highlight.setAlpha(60);
-			c.drawRect(where, highlight);
+			p.setAlpha(60);//creates slightly transparent black paint
+			c.drawRect(where, p);//paints over card to indicate selection
 		}
 	}
 
@@ -312,12 +340,19 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 * @return  if it is full or not
 	 */
 	private boolean isFull(Card[] arr){
-		for(Card c: arr){
+		for(Card c: arr){//checks if every element in the array is not null
 			if(c==null){return false;}
 		}
 		return true;
 	}
-	
+
+	private boolean isEmpty(Card[] arr){
+		for(Card c: arr){
+			if(c!=null)return false;
+		}
+		return true;
+	}
+
 	@Override
 
 	public int interval() {
@@ -331,7 +366,7 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	}
 
 	@Override
-	
+
 	public boolean doQuit() {
 		return false;
 	}
@@ -342,26 +377,18 @@ class CbgHumanPlayer extends GameHumanPlayer implements OnClickListener, Animato
 	 */
 	@Override
 	public void onTouch(MotionEvent event) {
-		if(event.getAction() == MotionEvent.ACTION_DOWN){
-			float x = event.getX();
+		if(event.getAction() == MotionEvent.ACTION_DOWN){//only selected on down motion
+			float x = event.getX();//coordinates of touch
 			float y = event.getY();	
 
-			if(state != null && state.getGameStage() == CbgState.THROW_STAGE && state.getTurn() == CbgState.PLAYER_1){//checks if state is not null, cecks stage
+			if(state != null && state.getTurn() == CbgState.PLAYER_1){//checks if state is not null, cecks stage
 				//and checks whose turn it is				
 				for(int i = 0; i<tempHand.length; i++){
 					if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
-						selectCard(tempHand[i]);//selects card in 						
-					}
-				}
-			}
-			if(state != null && state.getGameStage() == CbgState.PEG_STAGE && state.getTurn() == CbgState.PLAYER_1){
-				for(int i = 0; i<tempHand.length;i++){
-					if(handCardPos[i] != null && handCardPos[i].contains(x, y)){
-						selectCard(tempHand[i]);
+						selectCard(tempHand[i]);//selects card that user touched				
 					}
 				}
 			}
 		}	
 	}
 }
-
